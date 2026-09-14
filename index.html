@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Asado & Enciclopedia de Cortes</title>
+  <meta name="description" content="Calculá la cantidad exacta de carne, carbón, leña, achuras y bebidas para tu asado. Incluye enciclopedia interactiva de cortes vacunos.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="badge-tag">🔥 100% Parrillero • Ratios Exactos</div>
+    <h1 class="site-title">Calculadora de Asado</h1>
+    <p class="site-subtitle">
+      Ajustá los comensales, seleccioná tus cortes y tipo de fuego. Calculá carbón, leña, carne y achuras al gramo para no quedarte corto ni tirar comida.
+    </p>
+  </header>
+
+  <main class="main-container">
+    
+    <!-- Calculator Section -->
+    <div class="calc-grid">
+
+      <!-- Left Column: Inputs & Parameters -->
+      <section class="card" aria-labelledby="calc-params-title">
+        <h2 id="calc-params-title" class="card-title">
+          <span>⚙️</span> Parámetros del Asado
+        </h2>
+
+        <!-- Comensales (Adultos & Niños) -->
+        <div class="section-group">
+          <div class="group-title"><span>👥</span> Comensales</div>
+
+          <!-- Adultos Slider + Number Input -->
+          <div class="slider-row">
+            <div class="slider-header">
+              <div>
+                <label for="adults-range" class="slider-label">Adultos</label>
+                <div class="slider-desc">Comen porción estándar</div>
+              </div>
+              <div class="number-input-wrap">
+                <input type="number" id="adults-number" class="editable-number-input" min="1" max="100" value="6" step="1">
+                <span class="number-unit">pers.</span>
+              </div>
+            </div>
+            <input type="range" id="adults-range" class="custom-range" min="1" max="50" value="6" step="1">
+          </div>
+
+          <!-- Niños Slider + Number Input -->
+          <div class="slider-row">
+            <div class="slider-header">
+              <div>
+                <label for="kids-range" class="slider-label">Niños</label>
+                <div class="slider-desc">Calculados a 50% de porción</div>
+              </div>
+              <div class="number-input-wrap">
+                <input type="number" id="kids-number" class="editable-number-input" min="0" max="50" value="2" step="1">
+                <span class="number-unit">niños</span>
+              </div>
+            </div>
+            <input type="range" id="kids-range" class="custom-range" min="0" max="30" value="2" step="1">
+          </div>
+        </div>
+
+        <!-- Apetito / Perfil del Asado -->
+        <div class="section-group">
+          <div class="group-title"><span>🍽️</span> Nivel de Apetito</div>
+          <div class="appetite-grid" role="radiogroup" aria-label="Nivel de apetito">
+            <button type="button" class="pill-btn" data-appetite="tranqui">
+              Tranqui
+              <span class="pill-weight">~350g / adulto</span>
+            </button>
+            <button type="button" class="pill-btn active" data-appetite="clasico">
+              Clásico
+              <span class="pill-weight">~500g / adulto</span>
+            </button>
+            <button type="button" class="pill-btn" data-appetite="gloton">
+              Picapedrero
+              <span class="pill-weight">~650g / adulto</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tipo de Fuego (Carbón, Leña, Mix, Gas) -->
+        <div class="section-group">
+          <div class="group-title"><span>🔥</span> Tipo de Fuego</div>
+          <div class="fuel-selector" role="radiogroup" aria-label="Tipo de combustible">
+            <button type="button" class="fuel-btn active" data-fuel="carbon">
+              <span class="fuel-icon">🔥</span>
+              <span>Carbón</span>
+            </button>
+            <button type="button" class="fuel-btn" data-fuel="lena">
+              <span class="fuel-icon">🪵</span>
+              <span>Leña</span>
+            </button>
+            <button type="button" class="fuel-btn" data-fuel="mix">
+              <span class="fuel-icon">🔥🪵</span>
+              <span>Mix</span>
+            </button>
+            <button type="button" class="fuel-btn" data-fuel="gas">
+              <span class="fuel-icon">🔵</span>
+              <span>Gas (0 carbón)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Proteínas y Variedades -->
+        <div class="section-group">
+          <div class="group-title"><span>🥩</span> ¿Qué sumamos a la parrilla?</div>
+          <div class="toggles-list">
+            <label class="toggle-chip checked">
+              <input type="checkbox" id="toggle-chicken" checked>
+              <span>🍗 Pollo</span>
+            </label>
+            <label class="toggle-chip checked">
+              <input type="checkbox" id="toggle-pork" checked>
+              <span>🥓 Cerdo (Pechito)</span>
+            </label>
+            <label class="toggle-chip checked">
+              <input type="checkbox" id="toggle-achuras" checked>
+              <span>🌭 Achuras & Chori</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Distribución de Cortes Vacunos -->
+        <div class="section-group">
+          <div class="group-title"><span>🐂</span> Proporción de Cortes Vacunos</div>
+          
+          <div class="slider-row">
+            <div class="slider-header">
+              <label for="beef-tira-range" class="slider-label">Asado de Tira</label>
+              <div class="number-input-wrap">
+                <input type="number" id="beef-tira-number" class="editable-number-input" min="0" max="100" value="50" step="5">
+                <span class="number-unit">%</span>
+              </div>
+            </div>
+            <input type="range" id="beef-tira-range" class="custom-range" min="0" max="100" value="50" step="5">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <label for="beef-vacio-range" class="slider-label">Vacío</label>
+              <div class="number-input-wrap">
+                <input type="number" id="beef-vacio-number" class="editable-number-input" min="0" max="100" value="50" step="5">
+                <span class="number-unit">%</span>
+              </div>
+            </div>
+            <input type="range" id="beef-vacio-range" class="custom-range" min="0" max="100" value="50" step="5">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <label for="beef-entrana-range" class="slider-label">Entraña</label>
+              <div class="number-input-wrap">
+                <input type="number" id="beef-entrana-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                <span class="number-unit">%</span>
+              </div>
+            </div>
+            <input type="range" id="beef-entrana-range" class="custom-range" min="0" max="100" value="0" step="5">
+          </div>
+        </div>
+
+        <!-- Acompañamientos & Bebidas -->
+        <div class="section-group">
+          <div class="group-title"><span>🥖</span> Acompañamientos & Bebidas</div>
+          <div class="toggles-list">
+            <label class="toggle-chip checked">
+              <input type="checkbox" id="toggle-bread" checked>
+              <span>🥖 Pan francés</span>
+            </label>
+            <label class="toggle-chip checked">
+              <input type="checkbox" id="toggle-salads" checked>
+              <span>🥗 Ensaladas & Papas</span>
+            </label>
+            <label class="toggle-chip checked">
+              <input type="checkbox" id="toggle-drinks" checked>
+              <span>🍷 Vino, Cerveza & Hielo</span>
+            </label>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Live Calculated Output (The Butcher Ticket) -->
+      <aside class="card output-card" aria-label="Resultado de la comanda">
+        <h2 class="card-title">
+          <span>📋</span> La Comanda / Lista del Súper
+        </h2>
+
+        <!-- Summary Banner -->
+        <div class="summary-banner">
+          <div>
+            <div class="summary-title">Total Carne & Proteína</div>
+            <div class="summary-meat-total" id="out-total-meat">0.0 kg</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="summary-title">Comensales</div>
+            <div class="mono" style="font-size: 1.25rem; font-weight: 700; color: #fff;" id="out-total-people">8 personas</div>
+          </div>
+        </div>
+
+        <!-- Fuel Output Box -->
+        <div class="fuel-indicator" id="fuel-indicator-box">
+          <div class="fuel-headline">
+            <span id="fuel-out-name">🔥 Carbón Recomendado</span>
+            <span class="fuel-bags-badge" id="fuel-out-badge">2 bolsas</span>
+          </div>
+          <p class="fuel-note" id="fuel-out-note">
+            Calculando combustible según cantidad de carne...
+          </p>
+        </div>
+
+        <!-- Itemized List -->
+        <div class="shopping-list" id="shopping-list-container">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Action Buttons -->
+        <button type="button" class="btn-primary" id="btn-copy-whatsapp">
+          <span>📲</span> Copiar Lista para WhatsApp
+        </button>
+
+        <!-- Bill Splitter (Vaquita) -->
+        <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+          <div class="group-title" style="margin-bottom: 0.5rem;"><span>💰</span> Dividir la Cuenta (La Vaquita)</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <div class="number-input-wrap" style="flex: 1;">
+              <span class="number-unit">$</span>
+              <input type="number" id="vaquita-total-input" class="editable-number-input" placeholder="Gasto total" style="width: 100%; text-align: left;">
+            </div>
+            <div class="mono" style="font-weight: 700; font-size: 0.95rem; color: var(--accent-gold); white-space: nowrap;" id="vaquita-per-person">
+              $ 0 / pers.
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- ===================================================================
+         CUT ENCYCLOPEDIA SECTION
+         =================================================================== -->
+    <section class="encyclopedia-section" id="enciclopedia">
+      <div class="encyclopedia-header">
+        <div class="badge-tag">🥩 Anatomía del Asador</div>
+        <h2 class="encyclopedia-title">Enciclopedia de Cortes Vacunos</h2>
+        <p class="encyclopedia-desc">
+          Conocé de dónde sale cada corte, su nivel de grasa y terneza, la intensidad de fuego ideal y los secretos para asarlo a la perfección.
+        </p>
+      </div>
+
+      <!-- Cow Visual Display Container -->
+      <div class="cow-visual-container">
+        <div class="cow-controls-bar">
+          <div class="cow-view-modes">
+            <button type="button" class="mode-btn active" id="btn-view-svg">Diagrama Anatómico Interactivo</button>
+            <button type="button" class="mode-btn" id="btn-view-custom">Mi Foto de la Vaca</button>
+          </div>
+          
+          <div>
+            <label for="custom-cow-file" class="custom-photo-upload-label" title="Cargá tu propia foto del mapa de la vaca">
+              <span>📷</span> Subir / Cambiar Foto de la Vaca
+              <input type="file" id="custom-cow-file" class="custom-photo-upload-input" accept="image/*">
+            </label>
+          </div>
+        </div>
+
+        <!-- Stage 1: Interactive SVG Cow -->
+        <div class="cow-interactive-stage" id="cow-interactive-stage">
+          <div id="cow-svg-wrapper" style="width: 100%;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="100%" height="auto" class="cow-svg" id="interactive-cow-svg">
+              <defs>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <!-- Cow Head & Horns Silhouette -->
+              <g id="cow-head" class="cow-details">
+                <!-- Horns -->
+                <path d="M 810,140 C 830,105 845,95 860,90 C 850,110 835,130 820,150 Z" fill="#a8a29e" />
+                <path d="M 770,135 C 785,100 800,88 820,80 C 805,105 795,125 780,145 Z" fill="#d6d3d1" />
+                <!-- Head Body -->
+                <path d="M 760,150 Q 815,160 840,210 Q 855,245 840,270 Q 820,290 780,285 Q 740,270 730,225 Z" fill="#292524" stroke="#d97706" stroke-width="1.5" />
+                <!-- Muzzle / Snout -->
+                <ellipse cx="830" cy="255" rx="20" ry="16" fill="#44403c" />
+                <circle cx="823" cy="255" r="3.5" fill="#1c1917" />
+                <circle cx="837" cy="255" r="3.5" fill="#1c1917" />
+                <!-- Eye -->
+                <circle cx="785" cy="190" r="5" fill="#fbbf24" />
+                <circle cx="785" cy="190" r="2.5" fill="#000" />
+                <!-- Ears -->
+                <path d="M 745,170 Q 715,180 735,200 Z" fill="#57534e" />
+              </g>
+
+              <!-- Legs & Hooves (Foreground & Background) -->
+              <g id="cow-legs" fill="#221f1e" stroke="#57534e" stroke-width="2">
+                <!-- Rear Left Leg -->
+                <path d="M 170,360 L 155,465 L 140,490 L 165,490 L 180,465 L 195,360 Z" />
+                <!-- Rear Right Leg -->
+                <path d="M 230,360 L 220,465 L 205,490 L 230,490 L 245,465 L 255,360 Z" fill="#1c1917" />
+                <!-- Front Left Leg -->
+                <path d="M 640,350 L 635,465 L 620,490 L 645,490 L 660,465 L 665,350 Z" />
+                <!-- Front Right Leg -->
+                <path d="M 700,340 L 705,465 L 690,490 L 715,490 L 730,465 L 725,340 Z" fill="#1c1917" />
+                <!-- Hooves -->
+                <rect x="140" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
+                <rect x="205" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
+                <rect x="620" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
+                <rect x="690" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
+                <!-- Tail -->
+                <path d="M 120,220 Q 90,260 95,360 Q 90,390 85,410" fill="none" stroke="#292524" stroke-width="6" stroke-linecap="round" />
+                <path d="M 85,405 C 75,435 95,445 88,455 C 80,440 80,420 85,405" fill="#44403c" />
+              </g>
+
+              <!-- INTERACTIVE CUT ZONES -->
+
+              <!-- 1. Cuadril / Picaña (Top Rump) -->
+              <g class="cut-zone" id="cow-rump" data-cut="picana" data-cut-alt="colita-de-cuadril">
+                <path d="M 120,200 Q 150,150 240,150 L 250,210 L 150,250 Z" />
+                <text x="180" y="195" class="cut-label">CUADRIL / PICAÑA</text>
+                <text x="180" y="210" class="cut-label cut-sublabel">Colita de Cuadril</text>
+              </g>
+
+              <!-- 2. Lomo / Bife Angosto / Bife de Chorizo -->
+              <g class="cut-zone" id="cow-shortloin" data-cut="bife-de-chorizo" data-cut-alt="lomo">
+                <path d="M 240,150 L 370,145 L 365,220 L 250,210 Z" />
+                <text x="305" y="178" class="cut-label">BIFE DE CHORIZO</text>
+                <text x="305" y="193" class="cut-label cut-sublabel">Lomo / Bife Angosto</text>
+              </g>
+
+              <!-- 3. Ojo de Bife / Bife Ancho -->
+              <g class="cut-zone" id="cow-loin-front" data-cut="ojo-de-bife">
+                <path d="M 370,145 L 490,145 L 485,225 L 365,220 Z" />
+                <text x="428" y="178" class="cut-label">OJO DE BIFE</text>
+                <text x="428" y="193" class="cut-label cut-sublabel">Bife Ancho</text>
+              </g>
+
+              <!-- 4. Aguja / Tapa de Asado / Roast Beef -->
+              <g class="cut-zone" id="cow-chuck" data-cut="tapa-de-asado">
+                <path d="M 490,145 Q 580,150 630,190 L 610,270 L 485,225 Z" />
+                <text x="555" y="195" class="cut-label">TAPA DE ASADO</text>
+                <text x="555" y="210" class="cut-label cut-sublabel">Aguja / Roast Beef</text>
+              </g>
+
+              <!-- 5. Cogote & Mollejas de Cuello -->
+              <g class="cut-zone" id="cow-neck" data-cut="mollejas">
+                <path d="M 630,190 Q 720,180 730,225 L 680,310 L 610,270 Z" />
+                <text x="670" y="245" class="cut-label">COGOTE</text>
+                <text x="670" y="260" class="cut-label cut-sublabel">Mollejas</text>
+              </g>
+
+              <!-- 6. Asado de Tira / Costillar -->
+              <g class="cut-zone" id="cow-ribs" data-cut="asado-de-tira">
+                <path d="M 365,220 L 485,225 L 475,320 L 350,315 Z" />
+                <text x="415" y="265" class="cut-label" font-size="15">ASADO DE TIRA</text>
+                <text x="415" y="282" class="cut-label cut-sublabel">Costillar</text>
+              </g>
+
+              <!-- 7. Vacío -->
+              <g class="cut-zone" id="cow-flank" data-cut="vacio">
+                <path d="M 250,210 L 365,220 L 350,315 L 240,320 L 195,350 L 165,300 Z" />
+                <text x="275" y="265" class="cut-label" font-size="15">VACÍO</text>
+                <text x="275" y="282" class="cut-label cut-sublabel">Corte Clásico</text>
+              </g>
+
+              <!-- 8. Entraña / Falda -->
+              <g class="cut-zone" id="cow-plate" data-cut="entrana">
+                <path d="M 350,315 L 475,320 L 465,365 L 340,360 Z" />
+                <text x="408" y="340" class="cut-label">ENTRAÑA / FALDA</text>
+                <text x="408" y="353" class="cut-label cut-sublabel">Diafragma</text>
+              </g>
+
+              <!-- 9. Matambre Vacuno / Pecho -->
+              <g class="cut-zone" id="cow-brisket" data-cut="matambre">
+                <path d="M 485,225 L 610,270 L 590,360 L 465,365 L 475,320 Z" />
+                <text x="540" y="300" class="cut-label">MATAMBRE</text>
+                <text x="540" y="315" class="cut-label cut-sublabel">Pecho / Grano de Pecho</text>
+              </g>
+
+              <!-- 10. Nalga / Peceto / Bola de Lomo (Jamón trasero) -->
+              <g class="cut-zone" id="cow-round" data-cut="colita-de-cuadril">
+                <path d="M 120,200 L 150,250 L 165,300 L 195,350 L 170,360 L 120,290 Z" />
+                <text x="145" y="275" class="cut-label">PECETO</text>
+                <text x="145" y="290" class="cut-label cut-sublabel">Nalga / Bola</text>
+              </g>
+
+              <!-- 11. Paleta / Garrón Delantero -->
+              <g class="cut-zone" id="cow-shank" data-cut="tapa-de-asado">
+                <path d="M 610,270 L 680,310 L 650,360 L 590,360 Z" />
+                <text x="635" y="315" class="cut-label">PALETA</text>
+                <text x="635" y="330" class="cut-label cut-sublabel">Osobuco</text>
+              </g>
+
+              <!-- Legend Pinpoint / Help -->
+              <g transform="translate(30, 475)">
+                <rect width="320" height="32" rx="6" fill="#1c1917" opacity="0.85" stroke="#44403c" />
+                <circle cx="20" cy="16" r="6" fill="#e03a2f" />
+                <text x="35" y="20" fill="#d6d3d1" font-family="-apple-system, sans-serif" font-size="12" font-weight="500">
+                  Tocá cualquier corte en la vaca para ver su ficha
+                </text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Stage 2: User's Custom Picture Stage -->
+        <div class="custom-cow-image-wrapper" id="custom-cow-image-wrapper">
+          <img id="custom-cow-img" class="custom-cow-image" src="" alt="Mapa de cortes de la vaca">
+          <div id="custom-cow-placeholder" style="padding: 3rem 1rem; color: var(--text-muted);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🐄</div>
+            <p>Todavía no cargaste una imagen propia.</p>
+            <p style="font-size: 0.85rem; margin-top: 0.25rem;">
+              Hacé clic en <strong>"Subir / Cambiar Foto de la Vaca"</strong> arriba para elegir una imagen de tus archivos, o podés guardar un archivo llamado <code>assets/cow.jpg</code> o <code>assets/cow.png</code> en la carpeta del proyecto.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encyclopedia Search & Category Toolbar -->
+      <div class="encyclopedia-toolbar">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="cut-search-input" class="search-input" placeholder="Buscar corte (ej: Vacío, Tira, Entraña, Mollejas)...">
+        </div>
+
+        <div class="filter-pills" role="radiogroup" aria-label="Filtrar por categoría">
+          <button type="button" class="filter-btn active" data-cat="all">Todos los Cortes</button>
+          <button type="button" class="filter-btn" data-cat="vacuno">Vacunos</button>
+          <button type="button" class="filter-btn" data-cat="achuras">Achuras & Extras</button>
+        </div>
+      </div>
+
+      <!-- Cuts Cards Grid -->
+      <div class="cuts-grid" id="cuts-grid-container">
+        <!-- Rendered dynamically by app.js from data.js -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast-msg">
+    <span>✅</span> ¡Lista copiada al portapapeles!
+  </div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <p>
+      Calculadora de Asado &bull; Inspirada en la estética limpia de DoughGuy y las reglas de brasas de Clarín Gourmet.
+    </p>
+    <p style="margin-top: 0.5rem; font-size: 0.78rem;">
+      Creado con pasión por el asado argentino. ¡A disfrutar del fuego! 🇦🇷🥩🔥
+    </p>
+  </footer>
+
+  <!-- Script Modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
