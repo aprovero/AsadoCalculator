@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initVaquita();
   initCutEncyclopedia();
   initCowViewSwitcher();
-  initCustomImageUpload();
   initLightbox();
   initCopyButton();
 
@@ -564,38 +563,29 @@ function unhighlightCowZone(svgPartId) {
 }
 
 /* ==========================================================
-   10. COW VIEW SWITCHER, CUSTOM UPLOAD & LIGHTBOX
+   10. COW VIEW SWITCHER & LIGHTBOX
    ========================================================== */
 function initCowViewSwitcher() {
   const btnAngus = document.getElementById('btn-view-angus');
   const btnPoster = document.getElementById('btn-view-poster');
-  const btnCustom = document.getElementById('btn-view-custom');
 
   const stageAngus = document.getElementById('stage-angus');
   const stagePoster = document.getElementById('stage-poster');
-  const stageCustom = document.getElementById('stage-custom');
 
-  if (!btnAngus || !btnPoster || !btnCustom) return;
-
-  function switchView(activeBtn, activeStage, modeName) {
-    [btnAngus, btnPoster, btnCustom].forEach(b => b.classList.remove('active'));
-    [stageAngus, stagePoster, stageCustom].forEach(s => s.style.display = 'none');
-
-    activeBtn.classList.add('active');
-    activeStage.style.display = 'block';
-    state.viewMode = modeName;
-  }
+  if (!btnAngus || !btnPoster || !stageAngus || !stagePoster) return;
 
   btnAngus.addEventListener('click', () => {
-    switchView(btnAngus, stageAngus, 'angus');
+    btnAngus.classList.add('active');
+    btnPoster.classList.remove('active');
+    stageAngus.style.display = 'block';
+    stagePoster.style.display = 'none';
   });
 
   btnPoster.addEventListener('click', () => {
-    switchView(btnPoster, stagePoster, 'poster');
-  });
-
-  btnCustom.addEventListener('click', () => {
-    switchView(btnCustom, stageCustom, 'custom');
+    btnPoster.classList.add('active');
+    btnAngus.classList.remove('active');
+    stagePoster.style.display = 'block';
+    stageAngus.style.display = 'none';
   });
 }
 
@@ -606,7 +596,6 @@ function initLightbox() {
 
   const cardAngus = document.getElementById('card-zoom-angus');
   const cardPoster = document.getElementById('card-zoom-poster');
-  const customImg = document.getElementById('custom-cow-img');
 
   if (!lightbox || !lightboxImg) return;
 
@@ -634,14 +623,6 @@ function initLightbox() {
     });
   }
 
-  if (customImg) {
-    customImg.addEventListener('click', () => {
-      if (customImg.src) {
-        openLightbox(customImg.src, 'Foto personalizada de la vaca');
-      }
-    });
-  }
-
   if (closeBtn) {
     closeBtn.addEventListener('click', closeLightbox);
   }
@@ -657,47 +638,4 @@ function initLightbox() {
       closeLightbox();
     }
   });
-}
-
-function initCustomImageUpload() {
-  const fileInput = document.getElementById('custom-cow-file');
-  const customImg = document.getElementById('custom-cow-img');
-  const placeholder = document.getElementById('custom-cow-placeholder');
-  const btnCustom = document.getElementById('btn-view-custom');
-
-  // Check if user previously saved image in localStorage
-  const savedImage = localStorage.getItem('asado_custom_cow_image');
-  if (savedImage && customImg) {
-    customImg.src = savedImage;
-    customImg.style.display = 'block';
-    if (placeholder) placeholder.style.display = 'none';
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const dataUrl = event.target.result;
-          if (customImg) {
-            customImg.src = dataUrl;
-            customImg.style.display = 'block';
-          }
-          if (placeholder) {
-            placeholder.style.display = 'none';
-          }
-          try {
-            localStorage.setItem('asado_custom_cow_image', dataUrl);
-          } catch (e) {
-            console.warn('Image too large for localStorage');
-          }
-          // Automatically switch to Custom Image tab
-          if (btnCustom) btnCustom.click();
-          showToast('¡Foto de la vaca cargada con éxito! 🐄');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
 }

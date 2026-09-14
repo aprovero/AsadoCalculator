@@ -262,21 +262,16 @@
           <div class="cow-view-modes">
             <button type="button" class="mode-btn active" id="btn-view-angus">🐂 Diagrama American Angus</button>
             <button type="button" class="mode-btn" id="btn-view-poster">📋 Póster Pizarra Vintage</button>
-            <button type="button" class="mode-btn" id="btn-view-custom">📷 Mi Foto</button>
           </div>
-          
-          <div>
-            <label for="custom-cow-file" class="custom-photo-upload-label" title="Cargá tu propia foto del mapa de la vaca">
-              <span>📤</span> Subir otra foto
-              <input type="file" id="custom-cow-file" class="custom-photo-upload-input" accept="image/*">
-            </label>
+          <div class="zoom-hint-badge">
+            <span>🔍</span> Tocá cualquier imagen para ampliar en pantalla completa
           </div>
         </div>
 
         <!-- View 1: American Angus Diagram (High-Res & Crisp) -->
         <div class="cow-stage-view" id="stage-angus" style="display: block;">
           <div class="image-zoom-card" id="card-zoom-angus" title="Hacé clic para ampliar en pantalla completa">
-            <div class="zoom-badge">🔍 Clic / Tocar para ampliar</div>
+            <div class="zoom-badge">🔍 Ampliar imagen</div>
             <img src="assets/cow-angus.png" alt="Diagrama de Cortes American Angus" class="cow-featured-img">
           </div>
         </div>
@@ -284,23 +279,9 @@
         <!-- View 2: Vintage Chalkboard Poster -->
         <div class="cow-stage-view" id="stage-poster" style="display: none;">
           <div class="image-zoom-card" id="card-zoom-poster" title="Hacé clic para ampliar en pantalla completa">
-            <div class="zoom-badge">🔍 Clic / Tocar para ampliar</div>
+            <div class="zoom-badge">🔍 Ampliar imagen</div>
             <div class="poster-crop-wrapper">
               <img src="assets/cow-poster.jpg" alt="Mapa de Cortes de la Res Pizarra Vintage" class="poster-cropped-img">
-            </div>
-          </div>
-        </div>
-
-        <!-- View 3: User's Custom Uploaded Picture -->
-        <div class="cow-stage-view" id="stage-custom" style="display: none;">
-          <div class="custom-cow-image-wrapper" id="custom-cow-image-wrapper">
-            <img id="custom-cow-img" class="custom-cow-image" src="" alt="Mi foto personalizada de la vaca">
-            <div id="custom-cow-placeholder" style="padding: 3rem 1rem; color: var(--text-muted); text-align: center;">
-              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🐄</div>
-              <p>Todavía no cargaste una imagen personalizada.</p>
-              <p style="font-size: 0.85rem; margin-top: 0.25rem;">
-                Hacé clic en <strong>"Subir otra foto"</strong> arriba para cargar una foto desde tu galería o archivos.
-              </p>
             </div>
           </div>
         </div>
