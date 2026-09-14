@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initToggles();
   initVaquita();
   initCutEncyclopedia();
-  loadCowSvg();
   initCowViewSwitcher();
   initCustomImageUpload();
+  initLightbox();
   initCopyButton();
 
   // Initial Calculation
@@ -564,30 +564,98 @@ function unhighlightCowZone(svgPartId) {
 }
 
 /* ==========================================================
-   10. COW VIEW SWITCHER & USER IMAGE UPLOAD
+   10. COW VIEW SWITCHER, CUSTOM UPLOAD & LIGHTBOX
    ========================================================== */
 function initCowViewSwitcher() {
-  const btnSvg = document.getElementById('btn-view-svg');
+  const btnAngus = document.getElementById('btn-view-angus');
+  const btnPoster = document.getElementById('btn-view-poster');
   const btnCustom = document.getElementById('btn-view-custom');
-  const stageSvg = document.getElementById('cow-interactive-stage');
-  const stageCustom = document.getElementById('custom-cow-image-wrapper');
 
-  if (!btnSvg || !btnCustom) return;
+  const stageAngus = document.getElementById('stage-angus');
+  const stagePoster = document.getElementById('stage-poster');
+  const stageCustom = document.getElementById('stage-custom');
 
-  btnSvg.addEventListener('click', () => {
-    btnSvg.classList.add('active');
-    btnCustom.classList.remove('active');
-    stageSvg.style.display = 'flex';
-    stageCustom.style.display = 'none';
-    state.viewMode = 'svg';
+  if (!btnAngus || !btnPoster || !btnCustom) return;
+
+  function switchView(activeBtn, activeStage, modeName) {
+    [btnAngus, btnPoster, btnCustom].forEach(b => b.classList.remove('active'));
+    [stageAngus, stagePoster, stageCustom].forEach(s => s.style.display = 'none');
+
+    activeBtn.classList.add('active');
+    activeStage.style.display = 'block';
+    state.viewMode = modeName;
+  }
+
+  btnAngus.addEventListener('click', () => {
+    switchView(btnAngus, stageAngus, 'angus');
+  });
+
+  btnPoster.addEventListener('click', () => {
+    switchView(btnPoster, stagePoster, 'poster');
   });
 
   btnCustom.addEventListener('click', () => {
-    btnCustom.classList.add('active');
-    btnSvg.classList.remove('active');
-    stageSvg.style.display = 'none';
-    stageCustom.style.display = 'block';
-    state.viewMode = 'custom';
+    switchView(btnCustom, stageCustom, 'custom');
+  });
+}
+
+function initLightbox() {
+  const lightbox = document.getElementById('image-lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const closeBtn = document.getElementById('lightbox-close');
+
+  const cardAngus = document.getElementById('card-zoom-angus');
+  const cardPoster = document.getElementById('card-zoom-poster');
+  const customImg = document.getElementById('custom-cow-img');
+
+  if (!lightbox || !lightboxImg) return;
+
+  function openLightbox(src, altText = 'Mapa de cortes') {
+    lightboxImg.src = src;
+    lightboxImg.alt = altText;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (cardAngus) {
+    cardAngus.addEventListener('click', () => {
+      openLightbox('assets/cow-angus.png', 'Diagrama American Angus - Cortes de carne de res');
+    });
+  }
+
+  if (cardPoster) {
+    cardPoster.addEventListener('click', () => {
+      openLightbox('assets/cow-poster.jpg', 'Póster Pizarra - El mapa de los cortes de la res');
+    });
+  }
+
+  if (customImg) {
+    customImg.addEventListener('click', () => {
+      if (customImg.src) {
+        openLightbox(customImg.src, 'Foto personalizada de la vaca');
+      }
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeLightbox);
+  }
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target !== lightboxImg) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      closeLightbox();
+    }
   });
 }
 

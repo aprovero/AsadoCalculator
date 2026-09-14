@@ -260,168 +260,57 @@
       <div class="cow-visual-container">
         <div class="cow-controls-bar">
           <div class="cow-view-modes">
-            <button type="button" class="mode-btn active" id="btn-view-svg">Diagrama Anatómico Interactivo</button>
-            <button type="button" class="mode-btn" id="btn-view-custom">Mi Foto de la Vaca</button>
+            <button type="button" class="mode-btn active" id="btn-view-angus">🐂 Diagrama American Angus</button>
+            <button type="button" class="mode-btn" id="btn-view-poster">📋 Póster Pizarra Vintage</button>
+            <button type="button" class="mode-btn" id="btn-view-custom">📷 Mi Foto</button>
           </div>
           
           <div>
             <label for="custom-cow-file" class="custom-photo-upload-label" title="Cargá tu propia foto del mapa de la vaca">
-              <span>📷</span> Subir / Cambiar Foto de la Vaca
+              <span>📤</span> Subir otra foto
               <input type="file" id="custom-cow-file" class="custom-photo-upload-input" accept="image/*">
             </label>
           </div>
         </div>
 
-        <!-- Stage 1: Interactive SVG Cow -->
-        <div class="cow-interactive-stage" id="cow-interactive-stage">
-          <div id="cow-svg-wrapper" style="width: 100%;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="100%" height="auto" class="cow-svg" id="interactive-cow-svg">
-              <defs>
-                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
-
-              <!-- Cow Head & Horns Silhouette -->
-              <g id="cow-head" class="cow-details">
-                <!-- Horns -->
-                <path d="M 810,140 C 830,105 845,95 860,90 C 850,110 835,130 820,150 Z" fill="#a8a29e" />
-                <path d="M 770,135 C 785,100 800,88 820,80 C 805,105 795,125 780,145 Z" fill="#d6d3d1" />
-                <!-- Head Body -->
-                <path d="M 760,150 Q 815,160 840,210 Q 855,245 840,270 Q 820,290 780,285 Q 740,270 730,225 Z" fill="#292524" stroke="#d97706" stroke-width="1.5" />
-                <!-- Muzzle / Snout -->
-                <ellipse cx="830" cy="255" rx="20" ry="16" fill="#44403c" />
-                <circle cx="823" cy="255" r="3.5" fill="#1c1917" />
-                <circle cx="837" cy="255" r="3.5" fill="#1c1917" />
-                <!-- Eye -->
-                <circle cx="785" cy="190" r="5" fill="#fbbf24" />
-                <circle cx="785" cy="190" r="2.5" fill="#000" />
-                <!-- Ears -->
-                <path d="M 745,170 Q 715,180 735,200 Z" fill="#57534e" />
-              </g>
-
-              <!-- Legs & Hooves (Foreground & Background) -->
-              <g id="cow-legs" fill="#221f1e" stroke="#57534e" stroke-width="2">
-                <!-- Rear Left Leg -->
-                <path d="M 170,360 L 155,465 L 140,490 L 165,490 L 180,465 L 195,360 Z" />
-                <!-- Rear Right Leg -->
-                <path d="M 230,360 L 220,465 L 205,490 L 230,490 L 245,465 L 255,360 Z" fill="#1c1917" />
-                <!-- Front Left Leg -->
-                <path d="M 640,350 L 635,465 L 620,490 L 645,490 L 660,465 L 665,350 Z" />
-                <!-- Front Right Leg -->
-                <path d="M 700,340 L 705,465 L 690,490 L 715,490 L 730,465 L 725,340 Z" fill="#1c1917" />
-                <!-- Hooves -->
-                <rect x="140" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
-                <rect x="205" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
-                <rect x="620" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
-                <rect x="690" y="485" width="25" height="10" rx="2" fill="#0c0a09" />
-                <!-- Tail -->
-                <path d="M 120,220 Q 90,260 95,360 Q 90,390 85,410" fill="none" stroke="#292524" stroke-width="6" stroke-linecap="round" />
-                <path d="M 85,405 C 75,435 95,445 88,455 C 80,440 80,420 85,405" fill="#44403c" />
-              </g>
-
-              <!-- INTERACTIVE CUT ZONES -->
-
-              <!-- 1. Cuadril / Picaña (Top Rump) -->
-              <g class="cut-zone" id="cow-rump" data-cut="picana" data-cut-alt="colita-de-cuadril">
-                <path d="M 120,200 Q 150,150 240,150 L 250,210 L 150,250 Z" />
-                <text x="180" y="195" class="cut-label">CUADRIL / PICAÑA</text>
-                <text x="180" y="210" class="cut-label cut-sublabel">Colita de Cuadril</text>
-              </g>
-
-              <!-- 2. Lomo / Bife Angosto / Bife de Chorizo -->
-              <g class="cut-zone" id="cow-shortloin" data-cut="bife-de-chorizo" data-cut-alt="lomo">
-                <path d="M 240,150 L 370,145 L 365,220 L 250,210 Z" />
-                <text x="305" y="178" class="cut-label">BIFE DE CHORIZO</text>
-                <text x="305" y="193" class="cut-label cut-sublabel">Lomo / Bife Angosto</text>
-              </g>
-
-              <!-- 3. Ojo de Bife / Bife Ancho -->
-              <g class="cut-zone" id="cow-loin-front" data-cut="ojo-de-bife">
-                <path d="M 370,145 L 490,145 L 485,225 L 365,220 Z" />
-                <text x="428" y="178" class="cut-label">OJO DE BIFE</text>
-                <text x="428" y="193" class="cut-label cut-sublabel">Bife Ancho</text>
-              </g>
-
-              <!-- 4. Aguja / Tapa de Asado / Roast Beef -->
-              <g class="cut-zone" id="cow-chuck" data-cut="tapa-de-asado">
-                <path d="M 490,145 Q 580,150 630,190 L 610,270 L 485,225 Z" />
-                <text x="555" y="195" class="cut-label">TAPA DE ASADO</text>
-                <text x="555" y="210" class="cut-label cut-sublabel">Aguja / Roast Beef</text>
-              </g>
-
-              <!-- 5. Cogote & Mollejas de Cuello -->
-              <g class="cut-zone" id="cow-neck" data-cut="mollejas">
-                <path d="M 630,190 Q 720,180 730,225 L 680,310 L 610,270 Z" />
-                <text x="670" y="245" class="cut-label">COGOTE</text>
-                <text x="670" y="260" class="cut-label cut-sublabel">Mollejas</text>
-              </g>
-
-              <!-- 6. Asado de Tira / Costillar -->
-              <g class="cut-zone" id="cow-ribs" data-cut="asado-de-tira">
-                <path d="M 365,220 L 485,225 L 475,320 L 350,315 Z" />
-                <text x="415" y="265" class="cut-label" font-size="15">ASADO DE TIRA</text>
-                <text x="415" y="282" class="cut-label cut-sublabel">Costillar</text>
-              </g>
-
-              <!-- 7. Vacío -->
-              <g class="cut-zone" id="cow-flank" data-cut="vacio">
-                <path d="M 250,210 L 365,220 L 350,315 L 240,320 L 195,350 L 165,300 Z" />
-                <text x="275" y="265" class="cut-label" font-size="15">VACÍO</text>
-                <text x="275" y="282" class="cut-label cut-sublabel">Corte Clásico</text>
-              </g>
-
-              <!-- 8. Entraña / Falda -->
-              <g class="cut-zone" id="cow-plate" data-cut="entrana">
-                <path d="M 350,315 L 475,320 L 465,365 L 340,360 Z" />
-                <text x="408" y="340" class="cut-label">ENTRAÑA / FALDA</text>
-                <text x="408" y="353" class="cut-label cut-sublabel">Diafragma</text>
-              </g>
-
-              <!-- 9. Matambre Vacuno / Pecho -->
-              <g class="cut-zone" id="cow-brisket" data-cut="matambre">
-                <path d="M 485,225 L 610,270 L 590,360 L 465,365 L 475,320 Z" />
-                <text x="540" y="300" class="cut-label">MATAMBRE</text>
-                <text x="540" y="315" class="cut-label cut-sublabel">Pecho / Grano de Pecho</text>
-              </g>
-
-              <!-- 10. Nalga / Peceto / Bola de Lomo (Jamón trasero) -->
-              <g class="cut-zone" id="cow-round" data-cut="colita-de-cuadril">
-                <path d="M 120,200 L 150,250 L 165,300 L 195,350 L 170,360 L 120,290 Z" />
-                <text x="145" y="275" class="cut-label">PECETO</text>
-                <text x="145" y="290" class="cut-label cut-sublabel">Nalga / Bola</text>
-              </g>
-
-              <!-- 11. Paleta / Garrón Delantero -->
-              <g class="cut-zone" id="cow-shank" data-cut="tapa-de-asado">
-                <path d="M 610,270 L 680,310 L 650,360 L 590,360 Z" />
-                <text x="635" y="315" class="cut-label">PALETA</text>
-                <text x="635" y="330" class="cut-label cut-sublabel">Osobuco</text>
-              </g>
-
-              <!-- Legend Pinpoint / Help -->
-              <g transform="translate(30, 475)">
-                <rect width="320" height="32" rx="6" fill="#1c1917" opacity="0.85" stroke="#44403c" />
-                <circle cx="20" cy="16" r="6" fill="#e03a2f" />
-                <text x="35" y="20" fill="#d6d3d1" font-family="-apple-system, sans-serif" font-size="12" font-weight="500">
-                  Tocá cualquier corte en la vaca para ver su ficha
-                </text>
-              </g>
-            </svg>
+        <!-- View 1: American Angus Diagram (High-Res & Crisp) -->
+        <div class="cow-stage-view" id="stage-angus" style="display: block;">
+          <div class="image-zoom-card" id="card-zoom-angus" title="Hacé clic para ampliar en pantalla completa">
+            <div class="zoom-badge">🔍 Clic / Tocar para ampliar</div>
+            <img src="assets/cow-angus.png" alt="Diagrama de Cortes American Angus" class="cow-featured-img">
           </div>
         </div>
 
-        <!-- Stage 2: User's Custom Picture Stage -->
-        <div class="custom-cow-image-wrapper" id="custom-cow-image-wrapper">
-          <img id="custom-cow-img" class="custom-cow-image" src="" alt="Mapa de cortes de la vaca">
-          <div id="custom-cow-placeholder" style="padding: 3rem 1rem; color: var(--text-muted);">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🐄</div>
-            <p>Todavía no cargaste una imagen propia.</p>
-            <p style="font-size: 0.85rem; margin-top: 0.25rem;">
-              Hacé clic en <strong>"Subir / Cambiar Foto de la Vaca"</strong> arriba para elegir una imagen de tus archivos, o podés guardar un archivo llamado <code>assets/cow.jpg</code> o <code>assets/cow.png</code> en la carpeta del proyecto.
-            </p>
+        <!-- View 2: Vintage Chalkboard Poster -->
+        <div class="cow-stage-view" id="stage-poster" style="display: none;">
+          <div class="image-zoom-card" id="card-zoom-poster" title="Hacé clic para ampliar en pantalla completa">
+            <div class="zoom-badge">🔍 Clic / Tocar para ampliar</div>
+            <div class="poster-crop-wrapper">
+              <img src="assets/cow-poster.jpg" alt="Mapa de Cortes de la Res Pizarra Vintage" class="poster-cropped-img">
+            </div>
           </div>
+        </div>
+
+        <!-- View 3: User's Custom Uploaded Picture -->
+        <div class="cow-stage-view" id="stage-custom" style="display: none;">
+          <div class="custom-cow-image-wrapper" id="custom-cow-image-wrapper">
+            <img id="custom-cow-img" class="custom-cow-image" src="" alt="Mi foto personalizada de la vaca">
+            <div id="custom-cow-placeholder" style="padding: 3rem 1rem; color: var(--text-muted); text-align: center;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🐄</div>
+              <p>Todavía no cargaste una imagen personalizada.</p>
+              <p style="font-size: 0.85rem; margin-top: 0.25rem;">
+                Hacé clic en <strong>"Subir otra foto"</strong> arriba para cargar una foto desde tu galería o archivos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullscreen Image Lightbox / Zoom Modal -->
+      <div class="lightbox-modal" id="image-lightbox" aria-hidden="true">
+        <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Cerrar">✕</button>
+        <div class="lightbox-content">
+          <img id="lightbox-img" src="" alt="Corte de vaca ampliado">
         </div>
       </div>
 
