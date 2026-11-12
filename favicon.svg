@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Dark surface background container (#090B0E) matching aprovero.org theme -->
+  <rect width="512" height="512" rx="104" fill="#090B0E" />
+  
+  <!-- Signature high-voltage amber accent dot directly centered over the letter 'a' -->
+  <circle cx="256" cy="126" r="32" fill="#F59E0B" />
+  
+  <!-- Lowercase geometric letter 'a' matching official brand typography -->
+  <g fill="#F3F4F6">
+    <!-- Circular bowl (outer R=116, inner R=76) -->
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M 250 190 C 314 190 366 242 366 306 C 366 370 314 422 250 422 C 186 422 134 370 134 306 C 134 242 186 190 250 190 Z M 250 230 C 292 230 326 264 326 306 C 326 348 292 382 250 382 C 208 382 174 348 174 306 C 174 264 208 230 250 230 Z" />
+    <!-- Vertical right stem -->
+    <rect x="326" y="190" width="38" height="232" rx="2" />
+  </g>
+</svg>
