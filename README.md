@@ -9,7 +9,7 @@ Inspirada en el minimalismo y usabilidad de **[DoughGuy](https://doughguy.co/pag
 ## ✨ Características Principales
 
 ### 1. Calculadora Dinámica en Vivo (Cero recargas)
-- **Controles Duales (Sliders + Inputs Numéricos):** Podés deslizar o **escribir directamente el número exacto** en cada parámetro (comensales, niños, porcentaje de cortes vacunos, etc.).
+- **Controles Duales (Sliders + Inputs Numéricos):** Puedes deslizar o **escribir directamente el número exacto** en cada parámetro (comensales, niños, porcentaje de cortes vacunos, etc.).
 - **Niveles de Apetito:**
   - *Tranqui / Liviano:* ~350g por adulto.
   - *Clásico Parrillero:* ~500g por adulto (estándar tradicional).
@@ -18,12 +18,12 @@ Inspirada en el minimalismo y usabilidad de **[DoughGuy](https://doughguy.co/pag
   - **Carbón vegetal:** Aplica la regla áurea de *1 kg de carbón por cada 1 kg de carne* con margen de seguridad del 25%, redondeando automáticamente al tamaño comercial de bolsas de 4 kg.
   - **Leña (Quebracho / Espinillo):** Rinde menos masa en brasa que el carbón (~2.2 kg de leña por cada 1 kg de carne) redondeado a bolsas de 10 kg.
   - **Mix Leña + Carbón:** Base rápida con carbón + aroma y brasa sostenida con leña.
-  - **Parrilla a Gas:** **0 kg de carbón o leña.** Te recuerda verificar la garrafa o conexión a gas.
+  - **Parrilla a Gas:** **0 kg de carbón o leña.** Te recuerda verificar el tanque o conexión a gas.
 - **Personalización de Carnes & Acompañamientos:**
   - Toggles para incluir o quitar: Pollo, Pechito/Bondiola de Cerdo, Achuras & Chori, Pan francés, Ensaladas & Papas al plomo, y Bebidas (vino, cerveza, gaseosas y bolsas de hielo).
-  - Sliders para balancear los cortes vacunos (Asado de tira, Vacío, Entraña).
+  - Sliders para balancear 10 cortes vacunos (Asado de tira, Vacío, Entraña, Bife de Chorizo, Ojo de Bife, Picaña, Colita de Cuadril, Matambre, Lomo y Marucha/Arañita).
 - **Lista de Compras Lista para WhatsApp:** Botón de un solo clic que formatea la comanda con emojis para enviarla al grupo de amigos o familiares.
-- **Dividir la Cuenta ("La Vaquita"):** Ingresás el costo total estimado y te divide al instante el valor por persona.
+- **Dividir la Cuenta (Solo Adultos):** Ingresas el costo total estimado y divide al instante el valor únicamente entre los adultos.
 
 ---
 
@@ -31,18 +31,18 @@ Inspirada en el minimalismo y usabilidad de **[DoughGuy](https://doughguy.co/pag
 Ubicada debajo de la calculadora:
 - **Diagrama Anatómico Interactivo:** Mapa vectorial de la vaca con zonas delimitadas (Costillar, Vacío, Entraña, Bife de Chorizo, Ojo de Bife, Cuadril, Mollejas, etc.).
 - **Interactividad Bidireccional:**
-  - Hacé clic en cualquier corte sobre la vaca y la enciclopedia baja automáticamente a la tarjeta de ese corte.
-  - Pasá el mouse sobre la tarjeta de un corte y se iluminará su ubicación en la vaca.
+  - Haz clic en cualquier corte sobre la vaca y la enciclopedia baja automáticamente a la tarjeta de ese corte.
+  - Pasa el mouse sobre la tarjeta de un corte y se iluminará su ubicación en la vaca.
 - **Tu Propia Foto de la Vaca:**
   - Cuenta con un botón **"Subir / Cambiar Foto de la Vaca"** para cargar cualquier imagen desde tu computadora o celular (se guarda en tu navegador para tus próximas visitas).
-  - También podés cambiar entre la vista de *Diagrama Interactivo* y *Mi Foto*.
+  - También puedes cambiar entre la vista de *Diagrama Interactivo* y *Mi Foto*.
 - **Fichas Técnicas de Cada Corte:**
   - **Ubicación anatómica:** De qué parte del animal proviene.
   - **Para qué es mejor:** Estilo de cocción (fuego lento, vuelta y vuelta, a la cruz).
   - **Fuego y tiempo estimado:** Intensidad en segundos de aguante de mano.
   - **Nivel de grasa y terneza.**
   - **Secretos y tips del asador:** Salado, corte del cuerito, cómo empezar la cocción.
-- **Buscador y Filtros en Tiempo Real:** Filtrá por texto ("vacío", "tira", "entraña") o por categorías (*Vacunos* vs *Achuras & Extras*).
+- **Buscador y Filtros en Tiempo Real:** Filtra por texto ("vacío", "tira", "entraña") o por categorías (*Vacunos*, *Cerdo* y *Achuras & Extras*).
 
 ---
 
@@ -51,10 +51,10 @@ Ubicada debajo de la calculadora:
 No requiere instalar Node.js ni compilar nada. Está construido con tecnologías web modernas estándar (HTML5, CSS3, JavaScript ES Modules y SVG interactivo).
 
 ### Opción 1: Abrir directamente en el navegador
-Hacé doble clic en el archivo `index.html` con cualquier navegador (Chrome, Safari, Firefox, Edge).
+Haz doble clic en el archivo `index.html` con cualquier navegador (Chrome, Safari, Firefox, Edge).
 
 ### Opción 2: Servidor local ligero (Recomendado para desarrollo)
-Podés correr el servidor interno de Python:
+Puedes correr el servidor interno de Python:
 ```bash
 python3 -m http.server 8080
 ```
@@ -80,4 +80,4 @@ AsadoCalculator/
 
 ---
 
-¡Que disfrutes del fuego y del asado! 🇦🇷🔥
+¡Que disfrutes del fuego y del asado! 🥩🔥

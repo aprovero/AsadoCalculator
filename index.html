@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora de Asado & Enciclopedia de Cortes</title>
-  <meta name="description" content="Calculá la cantidad exacta de carne, carbón, leña, achuras y bebidas para tu asado. Incluye enciclopedia interactiva de cortes vacunos.">
+  <meta name="description" content="Calcula la cantidad exacta de carne, carbón, leña, achuras y bebidas para tu asado. Incluye enciclopedia interactiva de cortes vacunos.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
     <div class="badge-tag">🔥 100% Parrillero • Ratios Exactos</div>
     <h1 class="site-title">Calculadora de Asado</h1>
     <p class="site-subtitle">
-      Ajustá los comensales, seleccioná tus cortes y tipo de fuego. Calculá carbón, leña, carne y achuras al gramo para no quedarte corto ni tirar comida.
+      Ajusta los comensales, selecciona tus cortes y el tipo de fuego. Calcula carbón, leña, carne y achuras al gramo para no quedarte corto ni desperdiciar comida.
     </p>
   </header>
 
@@ -131,38 +131,116 @@
         <!-- Distribución de Cortes Vacunos -->
         <div class="section-group">
           <div class="group-title"><span>🐂</span> Proporción de Cortes Vacunos</div>
-          
-          <div class="slider-row">
-            <div class="slider-header">
-              <label for="beef-tira-range" class="slider-label">Asado de Tira</label>
-              <div class="number-input-wrap">
-                <input type="number" id="beef-tira-number" class="editable-number-input" min="0" max="100" value="50" step="5">
-                <span class="number-unit">%</span>
+          <div class="beef-cuts-grid">
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-tira-range" class="slider-label">Asado de Tira</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-tira-number" class="editable-number-input" min="0" max="100" value="40" step="5">
+                  <span class="number-unit">%</span>
+                </div>
               </div>
+              <input type="range" id="beef-tira-range" class="custom-range" min="0" max="100" value="40" step="5">
             </div>
-            <input type="range" id="beef-tira-range" class="custom-range" min="0" max="100" value="50" step="5">
-          </div>
 
-          <div class="slider-row">
-            <div class="slider-header">
-              <label for="beef-vacio-range" class="slider-label">Vacío</label>
-              <div class="number-input-wrap">
-                <input type="number" id="beef-vacio-number" class="editable-number-input" min="0" max="100" value="50" step="5">
-                <span class="number-unit">%</span>
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-vacio-range" class="slider-label">Vacío</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-vacio-number" class="editable-number-input" min="0" max="100" value="40" step="5">
+                  <span class="number-unit">%</span>
+                </div>
               </div>
+              <input type="range" id="beef-vacio-range" class="custom-range" min="0" max="100" value="40" step="5">
             </div>
-            <input type="range" id="beef-vacio-range" class="custom-range" min="0" max="100" value="50" step="5">
-          </div>
 
-          <div class="slider-row">
-            <div class="slider-header">
-              <label for="beef-entrana-range" class="slider-label">Entraña</label>
-              <div class="number-input-wrap">
-                <input type="number" id="beef-entrana-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                <span class="number-unit">%</span>
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-entrana-range" class="slider-label">Entraña</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-entrana-number" class="editable-number-input" min="0" max="100" value="20" step="5">
+                  <span class="number-unit">%</span>
+                </div>
               </div>
+              <input type="range" id="beef-entrana-range" class="custom-range" min="0" max="100" value="20" step="5">
             </div>
-            <input type="range" id="beef-entrana-range" class="custom-range" min="0" max="100" value="0" step="5">
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-bifeChorizo-range" class="slider-label">Bife de Chorizo</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-bifeChorizo-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                  <span class="number-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="beef-bifeChorizo-range" class="custom-range" min="0" max="100" value="0" step="5">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-ojoBife-range" class="slider-label">Ojo de Bife</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-ojoBife-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                  <span class="number-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="beef-ojoBife-range" class="custom-range" min="0" max="100" value="0" step="5">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-picana-range" class="slider-label">Picaña</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-picana-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                  <span class="number-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="beef-picana-range" class="custom-range" min="0" max="100" value="0" step="5">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-colita-range" class="slider-label">Colita de Cuadril</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-colita-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                  <span class="number-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="beef-colita-range" class="custom-range" min="0" max="100" value="0" step="5">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-matambre-range" class="slider-label">Matambre</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-matambre-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                  <span class="number-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="beef-matambre-range" class="custom-range" min="0" max="100" value="0" step="5">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-lomo-range" class="slider-label">Lomo</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-lomo-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                  <span class="number-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="beef-lomo-range" class="custom-range" min="0" max="100" value="0" step="5">
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <label for="beef-marucha-range" class="slider-label">Marucha / Arañita</label>
+                <div class="number-input-wrap">
+                  <input type="number" id="beef-marucha-number" class="editable-number-input" min="0" max="100" value="0" step="5">
+                  <span class="number-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="beef-marucha-range" class="custom-range" min="0" max="100" value="0" step="5">
+            </div>
           </div>
         </div>
 
@@ -228,14 +306,14 @@
 
         <!-- Bill Splitter (Vaquita) -->
         <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
-          <div class="group-title" style="margin-bottom: 0.5rem;"><span>💰</span> Dividir la Cuenta (La Vaquita)</div>
+          <div class="group-title" style="margin-bottom: 0.5rem;"><span>💰</span> Dividir la Cuenta (Solo Adultos)</div>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
             <div class="number-input-wrap" style="flex: 1;">
               <span class="number-unit">$</span>
               <input type="number" id="vaquita-total-input" class="editable-number-input" placeholder="Gasto total" style="width: 100%; text-align: left;">
             </div>
             <div class="mono" style="font-weight: 700; font-size: 0.95rem; color: var(--accent-gold); white-space: nowrap;" id="vaquita-per-person">
-              $ 0 / pers.
+              $ 0 / adulto
             </div>
           </div>
         </div>
@@ -252,7 +330,7 @@
         <div class="badge-tag">🥩 Anatomía del Asador</div>
         <h2 class="encyclopedia-title">Enciclopedia de Cortes Vacunos</h2>
         <p class="encyclopedia-desc">
-          Conocé de dónde sale cada corte, su nivel de grasa y terneza, la intensidad de fuego ideal y los secretos para asarlo a la perfección.
+          Conoce de dónde sale cada corte, su nivel de grasa y suavidad, la intensidad de fuego ideal y los secretos para asarlo a la perfección.
         </p>
       </div>
 
@@ -264,13 +342,13 @@
             <button type="button" class="mode-btn" id="btn-view-poster">📋 Póster Pizarra Vintage</button>
           </div>
           <div class="zoom-hint-badge">
-            <span>🔍</span> Tocá cualquier imagen para ampliar en pantalla completa
+            <span>🔍</span> Toca cualquier imagen para ampliar en pantalla completa
           </div>
         </div>
 
         <!-- View 1: American Angus Diagram (High-Res & Crisp) -->
         <div class="cow-stage-view" id="stage-angus" style="display: block;">
-          <div class="image-zoom-card" id="card-zoom-angus" title="Hacé clic para ampliar en pantalla completa">
+          <div class="image-zoom-card" id="card-zoom-angus" title="Haz clic para ampliar en pantalla completa">
             <div class="zoom-badge">🔍 Ampliar imagen</div>
             <img src="assets/cow-angus.png" alt="Diagrama de Cortes American Angus" class="cow-featured-img">
           </div>
@@ -278,7 +356,7 @@
 
         <!-- View 2: Vintage Chalkboard Poster -->
         <div class="cow-stage-view" id="stage-poster" style="display: none;">
-          <div class="image-zoom-card" id="card-zoom-poster" title="Hacé clic para ampliar en pantalla completa">
+          <div class="image-zoom-card" id="card-zoom-poster" title="Haz clic para ampliar en pantalla completa">
             <div class="zoom-badge">🔍 Ampliar imagen</div>
             <div class="poster-crop-wrapper">
               <img src="assets/cow-poster.jpg" alt="Mapa de Cortes de la Res Pizarra Vintage" class="poster-cropped-img">
@@ -330,7 +408,7 @@
       Calculadora de Asado &bull; Inspirada en la estética limpia de DoughGuy y las reglas de brasas de Clarín Gourmet.
     </p>
     <p style="margin-top: 0.5rem; font-size: 0.78rem;">
-      Creado con pasión por el asado argentino. ¡A disfrutar del fuego! 🇦🇷🥩🔥
+      Creado con pasión por el buen asado. ¡A disfrutar del fuego! 🥩🔥
     </p>
   </footer>
 

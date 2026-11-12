@@ -194,7 +194,7 @@ export const CUTS_ENCYCLOPEDIA = [
     cookingTime: "25 a 35 min",
     fatLevel: "Medio (excelente veteado intramuscular)",
     tenderness: "Muy tierna (especialmente si se retira el nervio central)",
-    tips: "Tiene una lámina de cartílago interna a lo largo del centro: podés pedirle al carnicero que saque los dos filetes limpios sin el nervio o asarla entera con buen fuego y cortar al sesgo.",
+    tips: "Tiene una lámina de cartílago interna a lo largo del centro: puedes pedirle al carnicero que saque los dos filetes limpios sin el nervio o asarla entera con buen fuego y cortar al sesgo.",
     svgPartId: "cow-shank"
   },
   {
@@ -250,7 +250,7 @@ export const CUTS_ENCYCLOPEDIA = [
     cookingTime: "40 a 55 min (en pieza gruesa)",
     fatLevel: "Medio - Alto (grasa entreverada entre músculos)",
     tenderness: "Tierna y muy sabrosa con cocción paciente",
-    tips: "Si elegís la parte pegada al bife ancho ('primer corte de aguja'), obtenés una calidad casi idéntica al ojo de bife a mucho menor precio.",
+    tips: "Si eliges la parte pegada al bife ancho ('primer corte de aguja'), obtienes una calidad casi idéntica al ojo de bife a mucho menor precio.",
     svgPartId: "cow-chuck"
   },
   {
@@ -320,7 +320,7 @@ export const CUTS_ENCYCLOPEDIA = [
     cookingTime: "30 min en bifes / 70 a 90 min entera",
     fatLevel: "Alto marmoleo intramuscular",
     tenderness: "Muy jugosa y tierna; casi imposible que quede seca",
-    tips: "Si la hacés entera, dora todas las caras y cocinala despacio pincelando con limón, ajo, mostaza o un toque de azúcar negra/miel en los últimos 10 minutos.",
+    tips: "Si la haces entera, dora todas las caras y cocínala despacio pincelando con limón, ajo, mostaza o un toque de azúcar negra/miel en los últimos 10 minutos.",
     svgPartId: "cow-chuck"
   },
   {
@@ -497,7 +497,7 @@ export const FUEL_TYPES = {
   gas: {
     id: "gas",
     name: "Parrilla a Gas",
-    description: "No requiere carbón ni leña. Solo asegurate de tener la garrafa cargada o gas de red.",
+    description: "No requiere carbón ni leña. Solo asegúrate de tener el tanque cargado o gas de red.",
     ratio: 0,
     icon: "🔵"
   }

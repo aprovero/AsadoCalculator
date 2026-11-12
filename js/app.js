@@ -16,9 +16,16 @@ const state = {
   includeSalads: true,
   includeDrinks: true,
   customBeefShares: {
-    tira: 50,
-    vacio: 50,
-    entrana: 0
+    tira: 40,
+    vacio: 40,
+    entrana: 20,
+    bifeChorizo: 0,
+    ojoBife: 0,
+    picana: 0,
+    colita: 0,
+    matambre: 0,
+    lomo: 0,
+    marucha: 0
   },
   vaquitaTotal: 0,
   activeCutFilter: 'all',
@@ -81,6 +88,55 @@ function initDualInputs() {
       min: 0,
       max: 100,
       onChange: (val) => { state.customBeefShares.entrana = val; }
+    },
+    {
+      range: 'beef-bifeChorizo-range',
+      number: 'beef-bifeChorizo-number',
+      min: 0,
+      max: 100,
+      onChange: (val) => { state.customBeefShares.bifeChorizo = val; }
+    },
+    {
+      range: 'beef-ojoBife-range',
+      number: 'beef-ojoBife-number',
+      min: 0,
+      max: 100,
+      onChange: (val) => { state.customBeefShares.ojoBife = val; }
+    },
+    {
+      range: 'beef-picana-range',
+      number: 'beef-picana-number',
+      min: 0,
+      max: 100,
+      onChange: (val) => { state.customBeefShares.picana = val; }
+    },
+    {
+      range: 'beef-colita-range',
+      number: 'beef-colita-number',
+      min: 0,
+      max: 100,
+      onChange: (val) => { state.customBeefShares.colita = val; }
+    },
+    {
+      range: 'beef-matambre-range',
+      number: 'beef-matambre-number',
+      min: 0,
+      max: 100,
+      onChange: (val) => { state.customBeefShares.matambre = val; }
+    },
+    {
+      range: 'beef-lomo-range',
+      number: 'beef-lomo-number',
+      min: 0,
+      max: 100,
+      onChange: (val) => { state.customBeefShares.lomo = val; }
+    },
+    {
+      range: 'beef-marucha-range',
+      number: 'beef-marucha-number',
+      min: 0,
+      max: 100,
+      onChange: (val) => { state.customBeefShares.marucha = val; }
     }
   ];
 
@@ -198,13 +254,13 @@ function initVaquita() {
 function updateVaquitaDisplay() {
   const display = document.getElementById('vaquita-per-person');
   if (!display) return;
-  const totalPeople = state.adults + state.kids;
-  if (totalPeople === 0 || state.vaquitaTotal <= 0) {
-    display.textContent = '$ 0 / pers.';
+  const totalAdults = state.adults;
+  if (totalAdults === 0 || state.vaquitaTotal <= 0) {
+    display.textContent = '$ 0 / adulto';
     return;
   }
-  const perPerson = Math.round(state.vaquitaTotal / totalPeople);
-  display.textContent = `$ ${perPerson.toLocaleString('es-AR')} / pers.`;
+  const perAdult = Math.round(state.vaquitaTotal / totalAdults);
+  display.textContent = `$ ${perAdult.toLocaleString()} / adulto`;
 }
 
 /* ==========================================================
@@ -270,13 +326,20 @@ function renderShoppingList(calc) {
       items.push({ icon: '🪵', name: 'Leña dura', qty: `${calc.fuel.woodBags} bolsa(s)` });
     }
   } else {
-    items.push({ icon: '🔵', name: 'Gas para parrilla', qty: 'Garrafa / Red' });
+    items.push({ icon: '🔵', name: 'Gas para parrilla', qty: 'Tanque / Red' });
   }
 
   // Meats
   if (calc.meats.tiraKg > 0) items.push({ icon: '🥩', name: 'Asado de Tira', qty: `${calc.meats.tiraKg} kg` });
   if (calc.meats.vacioKg > 0) items.push({ icon: '🥩', name: 'Vacío', qty: `${calc.meats.vacioKg} kg` });
   if (calc.meats.entranaKg > 0) items.push({ icon: '🥩', name: 'Entraña', qty: `${calc.meats.entranaKg} kg` });
+  if (calc.meats.bifeChorizoKg > 0) items.push({ icon: '🥩', name: 'Bife de Chorizo', qty: `${calc.meats.bifeChorizoKg} kg` });
+  if (calc.meats.ojoBifeKg > 0) items.push({ icon: '🥩', name: 'Ojo de Bife', qty: `${calc.meats.ojoBifeKg} kg` });
+  if (calc.meats.picanaKg > 0) items.push({ icon: '🥩', name: 'Picaña', qty: `${calc.meats.picanaKg} kg` });
+  if (calc.meats.colitaKg > 0) items.push({ icon: '🥩', name: 'Colita de Cuadril', qty: `${calc.meats.colitaKg} kg` });
+  if (calc.meats.matambreKg > 0) items.push({ icon: '🥩', name: 'Matambre', qty: `${calc.meats.matambreKg} kg` });
+  if (calc.meats.lomoKg > 0) items.push({ icon: '🥩', name: 'Lomo', qty: `${calc.meats.lomoKg} kg` });
+  if (calc.meats.maruchaKg > 0) items.push({ icon: '🥩', name: 'Marucha / Arañita', qty: `${calc.meats.maruchaKg} kg` });
   if (calc.meats.porkKg > 0) items.push({ icon: '🥓', name: 'Pechito / Bondiola de Cerdo', qty: `${calc.meats.porkKg} kg` });
   if (calc.meats.chickenKg > 0) items.push({ icon: '🍗', name: 'Pollo (pata-muslo)', qty: `${calc.meats.chickenKg} kg` });
   if (calc.meats.chorizos > 0) items.push({ icon: '🌭', name: 'Chorizos', qty: `${calc.meats.chorizos} u.` });
@@ -286,7 +349,7 @@ function renderShoppingList(calc) {
 
   // Bread & Sides
   if (calc.sides.breadKg > 0) {
-    items.push({ icon: '🥖', name: 'Pan francés / flautitas', qty: `~${calc.sides.breadKg} kg (${calc.sides.baguettes} u.)` });
+    items.push({ icon: '🥖', name: 'Pan francés / baguettes', qty: `~${calc.sides.breadKg} kg (${calc.sides.baguettes} u.)` });
   }
   if (state.includeSalads) {
     items.push({ icon: '🥗', name: 'Verduras ensalada (Tomate, Lechuga)', qty: 'A gusto' });
@@ -341,7 +404,7 @@ function initCopyButton() {
       }
       showToast('¡Lista copiada al portapapeles! Lista para pegar en WhatsApp 🔥');
     } catch (e) {
-      showToast('No se pudo copiar automáticamente. Copiá manualmente.');
+      showToast('No se pudo copiar automáticamente. Copia manualmente.');
     }
   });
 }

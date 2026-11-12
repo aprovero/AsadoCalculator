@@ -15,9 +15,16 @@ export function calculateAsado(state) {
     includeBread = true,
     includeDrinks = true,
     customBeefShares = {
-      tira: 50,
-      vacio: 50,
-      entrana: 0
+      tira: 40,
+      vacio: 40,
+      entrana: 20,
+      bifeChorizo: 0,
+      ojoBife: 0,
+      picana: 0,
+      colita: 0,
+      matambre: 0,
+      lomo: 0,
+      marucha: 0
     }
   } = state;
 
@@ -62,11 +69,25 @@ export function calculateAsado(state) {
 
   const beefGramsTotal = Math.max(0, remainingGramsForMeats - chickenGrams - porkGrams);
 
-  // Split beef cuts by user ratio
+  // Split beef cuts by user ratio (normalized so selected cuts always sum to 100% of beef weight)
   const beefWeightTotalKg = beefGramsTotal / 1000;
-  const tiraKg = (beefWeightTotalKg * (customBeefShares.tira / 100));
-  const vacioKg = (beefWeightTotalKg * (customBeefShares.vacio / 100));
-  const entranaKg = (beefWeightTotalKg * (customBeefShares.entrana / 100));
+  const cutKeys = [
+    'tira', 'vacio', 'entrana', 'bifeChorizo', 'ojoBife',
+    'picana', 'colita', 'matambre', 'lomo', 'marucha'
+  ];
+  const totalShare = cutKeys.reduce((acc, k) => acc + (Number(customBeefShares[k]) || 0), 0);
+  const shareRatio = (key) => totalShare > 0 ? (Number(customBeefShares[key]) || 0) / totalShare : 0;
+
+  const tiraKg = beefWeightTotalKg * shareRatio('tira');
+  const vacioKg = beefWeightTotalKg * shareRatio('vacio');
+  const entranaKg = beefWeightTotalKg * shareRatio('entrana');
+  const bifeChorizoKg = beefWeightTotalKg * shareRatio('bifeChorizo');
+  const ojoBifeKg = beefWeightTotalKg * shareRatio('ojoBife');
+  const picanaKg = beefWeightTotalKg * shareRatio('picana');
+  const colitaKg = beefWeightTotalKg * shareRatio('colita');
+  const matambreKg = beefWeightTotalKg * shareRatio('matambre');
+  const lomoKg = beefWeightTotalKg * shareRatio('lomo');
+  const maruchaKg = beefWeightTotalKg * shareRatio('marucha');
 
   const totalProteinsKg = (
     beefGramsTotal +
@@ -89,7 +110,7 @@ export function calculateAsado(state) {
   };
 
   if (fuelType === 'gas') {
-    fuelResult.notes = "Parrilla a gas seleccionada. No requiere carbón ni leña. Asegurate de tener la garrafa llena o gas de red.";
+    fuelResult.notes = "Parrilla a gas seleccionada. No requiere carbón ni leña. Asegúrate de tener el tanque lleno o conexión de red.";
   } else if (fuelType === 'carbon') {
     // 1 kg per kg meat + 25% safety margin, minimum 3.5 kg
     const estimatedKg = Math.max(3.5, Math.ceil(totalProteinsKg * 1.25));
@@ -141,6 +162,13 @@ export function calculateAsado(state) {
       tiraKg: round(tiraKg, 1),
       vacioKg: round(vacioKg, 1),
       entranaKg: round(entranaKg, 1),
+      bifeChorizoKg: round(bifeChorizoKg, 1),
+      ojoBifeKg: round(ojoBifeKg, 1),
+      picanaKg: round(picanaKg, 1),
+      colitaKg: round(colitaKg, 1),
+      matambreKg: round(matambreKg, 1),
+      lomoKg: round(lomoKg, 1),
+      maruchaKg: round(maruchaKg, 1),
       porkKg: round(porkGrams / 1000, 1),
       chickenKg: round(chickenGrams / 1000, 1),
       chorizos: Math.round(sausageGrams / 125),
@@ -177,7 +205,7 @@ export function formatWhatsAppShoppingList(calc, state) {
 
   lines.push(`🔥 *FUEGO:*`);
   if (calc.fuel.isGas) {
-    lines.push(`• Parrilla a gas (verificar garrafa/conexión)`);
+    lines.push(`• Parrilla a gas (verificar tanque/conexión)`);
   } else if (calc.fuel.type === 'carbon') {
     lines.push(`• Carbón: ${calc.fuel.coalBags} bolsa(s) de 4kg (~${calc.fuel.coalKg} kg)`);
   } else if (calc.fuel.type === 'lena') {
@@ -192,6 +220,13 @@ export function formatWhatsAppShoppingList(calc, state) {
   if (calc.meats.tiraKg > 0) lines.push(`• Asado de tira: ${calc.meats.tiraKg} kg`);
   if (calc.meats.vacioKg > 0) lines.push(`• Vacío: ${calc.meats.vacioKg} kg`);
   if (calc.meats.entranaKg > 0) lines.push(`• Entraña: ${calc.meats.entranaKg} kg`);
+  if (calc.meats.bifeChorizoKg > 0) lines.push(`• Bife de Chorizo: ${calc.meats.bifeChorizoKg} kg`);
+  if (calc.meats.ojoBifeKg > 0) lines.push(`• Ojo de Bife: ${calc.meats.ojoBifeKg} kg`);
+  if (calc.meats.picanaKg > 0) lines.push(`• Picaña: ${calc.meats.picanaKg} kg`);
+  if (calc.meats.colitaKg > 0) lines.push(`• Colita de Cuadril: ${calc.meats.colitaKg} kg`);
+  if (calc.meats.matambreKg > 0) lines.push(`• Matambre: ${calc.meats.matambreKg} kg`);
+  if (calc.meats.lomoKg > 0) lines.push(`• Lomo: ${calc.meats.lomoKg} kg`);
+  if (calc.meats.maruchaKg > 0) lines.push(`• Marucha / Arañita: ${calc.meats.maruchaKg} kg`);
   if (calc.meats.porkKg > 0) lines.push(`• Pechito / Bondiola de cerdo: ${calc.meats.porkKg} kg`);
   if (calc.meats.chickenKg > 0) lines.push(`• Pollo (pata-muslo): ${calc.meats.chickenKg} kg`);
   if (calc.meats.chorizos > 0) lines.push(`• Chorizos: ${calc.meats.chorizos} unidades`);
@@ -201,7 +236,7 @@ export function formatWhatsAppShoppingList(calc, state) {
   lines.push(``);
 
   lines.push(`🥖 *PAN & VERDULERÍA:*`);
-  if (calc.sides.breadKg > 0) lines.push(`• Pan francés / flautitas: ~${calc.sides.breadKg} kg (${calc.sides.baguettes} unidades)`);
+  if (calc.sides.breadKg > 0) lines.push(`• Pan francés / baguettes: ~${calc.sides.breadKg} kg (${calc.sides.baguettes} unidades)`);
   if (state.includeSalads) {
     lines.push(`• Lechuga, Tomate, Cebolla (ensalada)`);
     lines.push(`• Papas para hacer al plomo`);
@@ -219,6 +254,6 @@ export function formatWhatsAppShoppingList(calc, state) {
     lines.push(``);
   }
 
-  lines.push(`_Calculado con Asado Calculator_ 🇦🇷🔥`);
+  lines.push(`_Calculado con Asado Calculator_ 🥩🔥`);
   return lines.join("\n");
 }
