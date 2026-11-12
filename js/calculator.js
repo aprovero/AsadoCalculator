@@ -1,6 +1,37 @@
 // Calculation Engine for Asado Calculator
 
-import { FUEL_TYPES, APPETITE_LEVELS } from './data.js';
+import { FUEL_TYPES, APPETITE_LEVELS, BEEF_CUTS } from './data.js';
+
+export function distributeTenths(totalTenths, keys, weights = {}) {
+  const result = {};
+  if (!keys.length || totalTenths <= 0) {
+    keys.forEach((k) => { result[k] = 0; });
+    return result;
+  }
+
+  const rawWeights = keys.map((k) => Math.max(0, Number(weights[k]) || 0));
+  const weightSum = rawWeights.reduce((acc, w) => acc + w, 0);
+  const normalized = weightSum > 0
+    ? rawWeights.map((w) => w / weightSum)
+    : keys.map(() => 1 / keys.length);
+
+  const exact = normalized.map((share) => share * totalTenths);
+  const floors = exact.map((val) => Math.floor(val));
+  let remainder = totalTenths - floors.reduce((acc, v) => acc + v, 0);
+
+  const order = exact
+    .map((val, idx) => ({ idx, frac: val - floors[idx] }))
+    .sort((a, b) => b.frac - a.frac);
+
+  for (let i = 0; i < remainder; i++) {
+    floors[order[i % order.length].idx] += 1;
+  }
+
+  keys.forEach((k, idx) => {
+    result[k] = floors[idx];
+  });
+  return result;
+}
 
 export function calculateAsado(state) {
   const {
@@ -14,6 +45,8 @@ export function calculateAsado(state) {
     includeSalads = true,
     includeBread = true,
     includeDrinks = true,
+    selectedBeefCuts = BEEF_CUTS.filter((c) => c.defaultSelected).map((c) => c.key),
+    lockedBeefTenths = {},
     customBeefShares = {
       tira: 40,
       vacio: 40,
@@ -67,27 +100,52 @@ export function calculateAsado(state) {
     porkGrams = remainingGramsForMeats * 0.30;
   }
 
-  const beefGramsTotal = Math.max(0, remainingGramsForMeats - chickenGrams - porkGrams);
+  const potentialBeefGrams = Math.max(0, remainingGramsForMeats - chickenGrams - porkGrams);
+  const potentialBeefKg = round(potentialBeefGrams / 1000, 1);
 
-  // Split beef cuts by user ratio (normalized so selected cuts always sum to 100% of beef weight)
-  const beefWeightTotalKg = beefGramsTotal / 1000;
-  const cutKeys = [
-    'tira', 'vacio', 'entrana', 'bifeChorizo', 'ojoBife',
-    'picana', 'colita', 'matambre', 'lomo', 'marucha'
-  ];
-  const totalShare = cutKeys.reduce((acc, k) => acc + (Number(customBeefShares[k]) || 0), 0);
-  const shareRatio = (key) => totalShare > 0 ? (Number(customBeefShares[key]) || 0) / totalShare : 0;
+  const selectedKeys = Array.isArray(selectedBeefCuts) ? selectedBeefCuts : [];
+  const beefGramsTotal = selectedKeys.length > 0 ? potentialBeefGrams : 0;
+  const beefTotalKg = selectedKeys.length > 0 ? potentialBeefKg : 0;
+  const beefTotalTenths = Math.round(beefTotalKg * 10);
 
-  const tiraKg = beefWeightTotalKg * shareRatio('tira');
-  const vacioKg = beefWeightTotalKg * shareRatio('vacio');
-  const entranaKg = beefWeightTotalKg * shareRatio('entrana');
-  const bifeChorizoKg = beefWeightTotalKg * shareRatio('bifeChorizo');
-  const ojoBifeKg = beefWeightTotalKg * shareRatio('ojoBife');
-  const picanaKg = beefWeightTotalKg * shareRatio('picana');
-  const colitaKg = beefWeightTotalKg * shareRatio('colita');
-  const matambreKg = beefWeightTotalKg * shareRatio('matambre');
-  const lomoKg = beefWeightTotalKg * shareRatio('lomo');
-  const maruchaKg = beefWeightTotalKg * shareRatio('marucha');
+  const lockedKeys = selectedKeys.filter((k) => Object.prototype.hasOwnProperty.call(lockedBeefTenths, k));
+  const unlockedKeys = selectedKeys.filter((k) => !Object.prototype.hasOwnProperty.call(lockedBeefTenths, k));
+
+  let resolvedLockedTenths = {};
+  const rawLockedSum = lockedKeys.reduce((acc, k) => acc + Math.max(0, Math.round(Number(lockedBeefTenths[k]) || 0)), 0);
+
+  if (lockedKeys.length > 0) {
+    if (rawLockedSum > beefTotalTenths) {
+      resolvedLockedTenths = distributeTenths(beefTotalTenths, lockedKeys, lockedBeefTenths);
+    } else {
+      lockedKeys.forEach((k) => {
+        resolvedLockedTenths[k] = Math.max(0, Math.round(Number(lockedBeefTenths[k]) || 0));
+      });
+    }
+  }
+
+  const lockedSum = Object.values(resolvedLockedTenths).reduce((acc, v) => acc + v, 0);
+  const remainingTenths = Math.max(0, beefTotalTenths - lockedSum);
+  const unlockedTenths = distributeTenths(remainingTenths, unlockedKeys, customBeefShares);
+
+  const cutTenths = { ...resolvedLockedTenths, ...unlockedTenths };
+  if (unlockedKeys.length === 0 && lockedKeys.length > 0 && remainingTenths > 0) {
+    // Fallback if all selected cuts were locked and total grew
+    const extra = distributeTenths(beefTotalTenths, lockedKeys, resolvedLockedTenths);
+    Object.assign(cutTenths, extra);
+  }
+  const getCutKg = (key) => round((cutTenths[key] || 0) / 10, 1);
+
+  const tiraKg = getCutKg('tira');
+  const vacioKg = getCutKg('vacio');
+  const entranaKg = getCutKg('entrana');
+  const bifeChorizoKg = getCutKg('bifeChorizo');
+  const ojoBifeKg = getCutKg('ojoBife');
+  const picanaKg = getCutKg('picana');
+  const colitaKg = getCutKg('colita');
+  const matambreKg = getCutKg('matambre');
+  const lomoKg = getCutKg('lomo');
+  const maruchaKg = getCutKg('marucha');
 
   const totalProteinsKg = (
     beefGramsTotal +
@@ -158,6 +216,8 @@ export function calculateAsado(state) {
   return {
     people: { adults, kids, total: adults + kids },
     totalProteinsKg: round(totalProteinsKg, 1),
+    beefTotalKg,
+    potentialBeefKg,
     meats: {
       tiraKg: round(tiraKg, 1),
       vacioKg: round(vacioKg, 1),

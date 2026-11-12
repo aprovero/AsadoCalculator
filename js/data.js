@@ -526,3 +526,16 @@ export const APPETITE_LEVELS = {
     meatPerKid: 350
   }
 };
+
+export const BEEF_CUTS = [
+  { key: "tira", label: "Asado de Tira", defaultSelected: true, defaultShare: 40 },
+  { key: "vacio", label: "Vacío", defaultSelected: true, defaultShare: 40 },
+  { key: "entrana", label: "Entraña", defaultSelected: true, defaultShare: 20 },
+  { key: "bifeChorizo", label: "Bife de Chorizo", defaultSelected: false, defaultShare: 0 },
+  { key: "ojoBife", label: "Ojo de Bife", defaultSelected: false, defaultShare: 0 },
+  { key: "picana", label: "Picaña", defaultSelected: false, defaultShare: 0 },
+  { key: "colita", label: "Colita de Cuadril", defaultSelected: false, defaultShare: 0 },
+  { key: "matambre", label: "Matambre", defaultSelected: false, defaultShare: 0 },
+  { key: "lomo", label: "Lomo", defaultSelected: false, defaultShare: 0 },
+  { key: "marucha", label: "Marucha / Arañita", defaultSelected: false, defaultShare: 0 }
+];

@@ -1,7 +1,7 @@
 // Main Application Controller
 
-import { CUTS_ENCYCLOPEDIA, FUEL_TYPES } from './data.js';
-import { calculateAsado, formatWhatsAppShoppingList } from './calculator.js';
+import { CUTS_ENCYCLOPEDIA, FUEL_TYPES, BEEF_CUTS } from './data.js';
+import { calculateAsado, formatWhatsAppShoppingList, distributeTenths } from './calculator.js';
 
 // Application State
 const state = {
@@ -15,18 +15,12 @@ const state = {
   includeBread: true,
   includeSalads: true,
   includeDrinks: true,
-  customBeefShares: {
-    tira: 40,
-    vacio: 40,
-    entrana: 20,
-    bifeChorizo: 0,
-    ojoBife: 0,
-    picana: 0,
-    colita: 0,
-    matambre: 0,
-    lomo: 0,
-    marucha: 0
-  },
+  selectedBeefCuts: BEEF_CUTS.filter((c) => c.defaultSelected).map((c) => c.key),
+  lockedBeefTenths: {},
+  customBeefShares: BEEF_CUTS.reduce((acc, cut) => {
+    acc[cut.key] = cut.defaultShare;
+    return acc;
+  }, {}),
   vaquitaTotal: 0,
   activeCutFilter: 'all',
   searchQuery: '',
@@ -39,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAppetiteButtons();
   initFuelButtons();
   initToggles();
+  initBeefCutsSelector();
   initVaquita();
   initCutEncyclopedia();
   initCowViewSwitcher();
@@ -46,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCopyButton();
 
   // Initial Calculation
+  renderBeefCutSliders();
   recalculate();
 });
 
@@ -67,76 +63,6 @@ function initDualInputs() {
       min: 0,
       max: 50,
       onChange: (val) => { state.kids = val; }
-    },
-    {
-      range: 'beef-tira-range',
-      number: 'beef-tira-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.tira = val; }
-    },
-    {
-      range: 'beef-vacio-range',
-      number: 'beef-vacio-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.vacio = val; }
-    },
-    {
-      range: 'beef-entrana-range',
-      number: 'beef-entrana-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.entrana = val; }
-    },
-    {
-      range: 'beef-bifeChorizo-range',
-      number: 'beef-bifeChorizo-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.bifeChorizo = val; }
-    },
-    {
-      range: 'beef-ojoBife-range',
-      number: 'beef-ojoBife-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.ojoBife = val; }
-    },
-    {
-      range: 'beef-picana-range',
-      number: 'beef-picana-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.picana = val; }
-    },
-    {
-      range: 'beef-colita-range',
-      number: 'beef-colita-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.colita = val; }
-    },
-    {
-      range: 'beef-matambre-range',
-      number: 'beef-matambre-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.matambre = val; }
-    },
-    {
-      range: 'beef-lomo-range',
-      number: 'beef-lomo-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.lomo = val; }
-    },
-    {
-      range: 'beef-marucha-range',
-      number: 'beef-marucha-number',
-      min: 0,
-      max: 100,
-      onChange: (val) => { state.customBeefShares.marucha = val; }
     }
   ];
 
@@ -239,6 +165,302 @@ function initToggles() {
 }
 
 /* ==========================================================
+   4B. BEEF CUTS CHECKBOXES & DYNAMIC KG SLIDERS
+   ========================================================== */
+function initBeefCutsSelector() {
+  const container = document.getElementById('beef-cuts-selector');
+  if (!container) return;
+
+  container.innerHTML = '';
+  BEEF_CUTS.forEach((cut) => {
+    const isSelected = state.selectedBeefCuts.includes(cut.key);
+    const label = document.createElement('label');
+    label.className = `toggle-chip${isSelected ? ' checked' : ''}`;
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = isSelected;
+    checkbox.dataset.beefCut = cut.key;
+
+    const text = document.createElement('span');
+    text.textContent = cut.label;
+
+    label.appendChild(checkbox);
+    label.appendChild(text);
+    container.appendChild(label);
+
+    checkbox.addEventListener('change', () => {
+      label.classList.toggle('checked', checkbox.checked);
+      toggleBeefCut(cut.key, checkbox.checked);
+    });
+  });
+}
+
+function isCutLocked(cutKey) {
+  return Object.prototype.hasOwnProperty.call(state.lockedBeefTenths, cutKey);
+}
+
+function toggleBeefCut(cutKey, enabled) {
+  if (enabled) {
+    if (!state.selectedBeefCuts.includes(cutKey)) {
+      state.selectedBeefCuts.push(cutKey);
+    }
+    const existingUnlocked = state.selectedBeefCuts.filter((k) => k !== cutKey && !isCutLocked(k));
+    const existingSum = existingUnlocked.reduce((acc, k) => acc + (Number(state.customBeefShares[k]) || 0), 0);
+    if (existingUnlocked.length === 0 || existingSum <= 0) {
+      state.customBeefShares[cutKey] = 100;
+    } else {
+      // Give the newly added cut an equal slice of the unlocked pool
+      state.customBeefShares[cutKey] = existingSum / existingUnlocked.length;
+    }
+  } else {
+    state.selectedBeefCuts = state.selectedBeefCuts.filter((k) => k !== cutKey);
+    delete state.lockedBeefTenths[cutKey];
+    state.customBeefShares[cutKey] = 0;
+    const remainingUnlocked = state.selectedBeefCuts.filter((k) => !isCutLocked(k));
+    const remainingSum = remainingUnlocked.reduce(
+      (acc, k) => acc + (Number(state.customBeefShares[k]) || 0),
+      0
+    );
+    if (remainingUnlocked.length > 0 && remainingSum <= 0) {
+      remainingUnlocked.forEach((k) => { state.customBeefShares[k] = 100; });
+    }
+  }
+
+  renderBeefCutSliders();
+  recalculate();
+}
+
+function toggleBeefCutLock(cutKey) {
+  if (isCutLocked(cutKey)) {
+    const unlockedTenths = state.lockedBeefTenths[cutKey];
+    delete state.lockedBeefTenths[cutKey];
+    state.customBeefShares[cutKey] = unlockedTenths > 0 ? unlockedTenths : 1;
+  } else {
+    const unlockedCount = state.selectedBeefCuts.filter((k) => !isCutLocked(k)).length;
+    if (unlockedCount <= 1) return;
+    const calc = calculateAsado(state);
+    const currentKg = calc.meats[`${cutKey}Kg`] || 0;
+    state.lockedBeefTenths[cutKey] = Math.round(currentKg * 10);
+  }
+
+  recalculate();
+}
+
+function renderBeefCutSliders() {
+  const container = document.getElementById('beef-cuts-sliders');
+  if (!container) return;
+
+  container.innerHTML = '';
+  const activeCuts = BEEF_CUTS.filter((c) => state.selectedBeefCuts.includes(c.key));
+
+  if (activeCuts.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'beef-empty-state';
+    empty.id = 'beef-empty-state';
+    empty.textContent = 'Selecciona al menos un corte vacuno arriba para repartir la carne.';
+    container.appendChild(empty);
+    return;
+  }
+
+  const showLockBtn = activeCuts.length > 1;
+
+  activeCuts.forEach((cut) => {
+    const row = document.createElement('div');
+    row.className = 'slider-row';
+    row.dataset.cutRow = cut.key;
+
+    const header = document.createElement('div');
+    header.className = 'slider-header';
+
+    const labelWrap = document.createElement('div');
+    const labelRow = document.createElement('div');
+    labelRow.className = 'cut-label-row';
+
+    const label = document.createElement('label');
+    label.className = 'slider-label';
+    label.htmlFor = `beef-${cut.key}-range`;
+    label.textContent = cut.label;
+    labelRow.appendChild(label);
+
+    if (showLockBtn) {
+      const lockBtn = document.createElement('button');
+      lockBtn.type = 'button';
+      lockBtn.className = 'cut-lock-btn';
+      lockBtn.dataset.cutLock = cut.key;
+      lockBtn.addEventListener('click', () => toggleBeefCutLock(cut.key));
+      labelRow.appendChild(lockBtn);
+    }
+
+    const desc = document.createElement('div');
+    desc.className = 'slider-desc';
+    desc.dataset.cutPct = cut.key;
+
+    labelWrap.appendChild(labelRow);
+    labelWrap.appendChild(desc);
+
+    const numWrap = document.createElement('div');
+    numWrap.className = 'number-input-wrap';
+
+    const numInput = document.createElement('input');
+    numInput.type = 'number';
+    numInput.id = `beef-${cut.key}-number`;
+    numInput.className = 'editable-number-input';
+    numInput.min = '0';
+    numInput.step = '0.1';
+    numInput.dataset.cutNumber = cut.key;
+
+    const unit = document.createElement('span');
+    unit.className = 'number-unit';
+    unit.textContent = 'kg';
+
+    numWrap.appendChild(numInput);
+    numWrap.appendChild(unit);
+
+    header.appendChild(labelWrap);
+    header.appendChild(numWrap);
+
+    const rangeInput = document.createElement('input');
+    rangeInput.type = 'range';
+    rangeInput.id = `beef-${cut.key}-range`;
+    rangeInput.className = 'custom-range';
+    rangeInput.min = '0';
+    rangeInput.step = '0.1';
+    rangeInput.dataset.cutRange = cut.key;
+
+    row.appendChild(header);
+    row.appendChild(rangeInput);
+    container.appendChild(row);
+
+    rangeInput.addEventListener('input', () => {
+      const val = parseFloat(rangeInput.value);
+      handleBeefCutKgChange(cut.key, isNaN(val) ? 0 : val, false);
+    });
+
+    numInput.addEventListener('input', () => {
+      if (numInput.value === '') return;
+      const val = parseFloat(numInput.value);
+      if (!isNaN(val)) {
+        handleBeefCutKgChange(cut.key, val, true);
+      }
+    });
+
+    numInput.addEventListener('blur', () => {
+      const val = parseFloat(numInput.value);
+      handleBeefCutKgChange(cut.key, isNaN(val) ? 0 : val, false);
+    });
+  });
+}
+
+function handleBeefCutKgChange(editedKey, rawKg, preserveActiveInput) {
+  if (isCutLocked(editedKey)) return;
+
+  const calc = calculateAsado(state);
+  const totalKg = calc.beefTotalKg;
+  const totalTenths = Math.round(totalKg * 10);
+
+  if (totalTenths <= 0) {
+    recalculate();
+    return;
+  }
+
+  const lockedOtherSum = state.selectedBeefCuts
+    .filter((k) => k !== editedKey && isCutLocked(k))
+    .reduce((acc, k) => acc + Math.round((calc.meats[`${k}Kg`] || 0) * 10), 0);
+
+  const maxEditableTenths = Math.max(0, totalTenths - lockedOtherSum);
+  const editedTenths = Math.min(maxEditableTenths, Math.max(0, Math.round(rawKg * 10)));
+  const remainingTenths = Math.max(0, maxEditableTenths - editedTenths);
+  const unlockedOtherKeys = state.selectedBeefCuts.filter((k) => k !== editedKey && !isCutLocked(k));
+
+  if (unlockedOtherKeys.length === 0) {
+    state.customBeefShares[editedKey] = 100;
+  } else {
+    const otherTenths = distributeTenths(remainingTenths, unlockedOtherKeys, state.customBeefShares);
+    state.customBeefShares[editedKey] = editedTenths;
+    unlockedOtherKeys.forEach((k) => {
+      state.customBeefShares[k] = otherTenths[k];
+    });
+  }
+
+  recalculate(preserveActiveInput ? editedKey : null);
+}
+
+function syncBeefCutSliders(calc, skipNumberKey = null) {
+  const badge = document.getElementById('beef-budget-badge');
+  if (badge) {
+    badge.textContent = state.selectedBeefCuts.length > 0
+      ? `Total vacuno: ${calc.beefTotalKg.toFixed(1)} kg`
+      : `0.0 kg (${calc.potentialBeefKg.toFixed(1)} kg sug.)`;
+  }
+
+  const emptyEl = document.getElementById('beef-empty-state');
+  if (emptyEl) {
+    emptyEl.textContent = `Selecciona al menos un corte vacuno arriba para repartir los ${calc.potentialBeefKg.toFixed(1)} kg sugeridos.`;
+    return;
+  }
+
+  const totalKg = calc.beefTotalKg;
+  const unlockedKeys = state.selectedBeefCuts.filter((k) => !isCutLocked(k));
+  const unlockedCount = unlockedKeys.length;
+
+  state.selectedBeefCuts.forEach((key) => {
+    const kgField = `${key}Kg`;
+    const cutKg = calc.meats[kgField] || 0;
+    const pct = totalKg > 0 ? Math.round((cutKg / totalKg) * 100) : 0;
+    const locked = isCutLocked(key);
+    const isAutoRemainder = !locked && unlockedCount <= 1;
+
+    const lockedOthersKg = state.selectedBeefCuts
+      .filter((k) => k !== key && isCutLocked(k))
+      .reduce((acc, k) => acc + (calc.meats[`${k}Kg`] || 0), 0);
+    const maxForCutKg = Math.max(0, Math.round((totalKg - lockedOthersKg) * 10) / 10);
+
+    const rowEl = document.querySelector(`[data-cut-row="${key}"]`);
+    const rangeEl = document.querySelector(`[data-cut-range="${key}"]`);
+    const numEl = document.querySelector(`[data-cut-number="${key}"]`);
+    const pctEl = document.querySelector(`[data-cut-pct="${key}"]`);
+    const lockEl = document.querySelector(`[data-cut-lock="${key}"]`);
+
+    if (rowEl) {
+      rowEl.classList.toggle('is-locked', locked);
+    }
+    if (lockEl) {
+      lockEl.classList.toggle('locked', locked);
+      lockEl.textContent = locked ? '🔒' : '🔓';
+      lockEl.title = locked
+        ? 'Desbloquear para que se ajuste automáticamente'
+        : (unlockedCount <= 1 ? 'Debe quedar al menos 1 corte libre' : 'Fijar kilos de este corte');
+      lockEl.setAttribute('aria-label', locked ? 'Desbloquear peso' : 'Fijar peso');
+      lockEl.disabled = !locked && unlockedCount <= 1;
+    }
+    if (rangeEl) {
+      rangeEl.max = (locked ? totalKg : maxForCutKg).toFixed(1);
+      rangeEl.value = cutKg.toFixed(1);
+      rangeEl.disabled = locked || isAutoRemainder;
+    }
+    if (numEl) {
+      numEl.max = (locked ? totalKg : maxForCutKg).toFixed(1);
+      numEl.disabled = locked || isAutoRemainder;
+      if (skipNumberKey !== key) {
+        numEl.value = cutKg.toFixed(1);
+      }
+    }
+    if (pctEl) {
+      if (state.selectedBeefCuts.length === 1) {
+        pctEl.textContent = '100% del vacuno';
+      } else if (locked) {
+        pctEl.textContent = `🔒 Fijo (${pct}%)`;
+      } else if (isAutoRemainder) {
+        pctEl.textContent = `Resto automático (${pct}%)`;
+      } else {
+        pctEl.textContent = `${pct}% del vacuno`;
+      }
+    }
+  });
+}
+
+/* ==========================================================
    5. VAQUITA / BILL SPLITTER
    ========================================================== */
 function initVaquita() {
@@ -266,8 +488,10 @@ function updateVaquitaDisplay() {
 /* ==========================================================
    6. RECALCULATION & RENDER RESULTS
    ========================================================== */
-function recalculate() {
+function recalculate(skipNumberKey = null) {
   const calc = calculateAsado(state);
+
+  syncBeefCutSliders(calc, skipNumberKey);
 
   // Render Meat Total & Guests
   document.getElementById('out-total-meat').textContent = `${calc.totalProteinsKg} kg`;

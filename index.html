@@ -128,119 +128,20 @@
           </div>
         </div>
 
-        <!-- Distribución de Cortes Vacunos -->
+        <!-- Selección y Distribución de Cortes Vacunos -->
         <div class="section-group">
-          <div class="group-title"><span>🐂</span> Proporción de Cortes Vacunos</div>
-          <div class="beef-cuts-grid">
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-tira-range" class="slider-label">Asado de Tira</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-tira-number" class="editable-number-input" min="0" max="100" value="40" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-tira-range" class="custom-range" min="0" max="100" value="40" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-vacio-range" class="slider-label">Vacío</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-vacio-number" class="editable-number-input" min="0" max="100" value="40" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-vacio-range" class="custom-range" min="0" max="100" value="40" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-entrana-range" class="slider-label">Entraña</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-entrana-number" class="editable-number-input" min="0" max="100" value="20" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-entrana-range" class="custom-range" min="0" max="100" value="20" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-bifeChorizo-range" class="slider-label">Bife de Chorizo</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-bifeChorizo-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-bifeChorizo-range" class="custom-range" min="0" max="100" value="0" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-ojoBife-range" class="slider-label">Ojo de Bife</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-ojoBife-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-ojoBife-range" class="custom-range" min="0" max="100" value="0" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-picana-range" class="slider-label">Picaña</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-picana-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-picana-range" class="custom-range" min="0" max="100" value="0" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-colita-range" class="slider-label">Colita de Cuadril</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-colita-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-colita-range" class="custom-range" min="0" max="100" value="0" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-matambre-range" class="slider-label">Matambre</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-matambre-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-matambre-range" class="custom-range" min="0" max="100" value="0" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-lomo-range" class="slider-label">Lomo</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-lomo-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-lomo-range" class="custom-range" min="0" max="100" value="0" step="5">
-            </div>
-
-            <div class="slider-row">
-              <div class="slider-header">
-                <label for="beef-marucha-range" class="slider-label">Marucha / Arañita</label>
-                <div class="number-input-wrap">
-                  <input type="number" id="beef-marucha-number" class="editable-number-input" min="0" max="100" value="0" step="5">
-                  <span class="number-unit">%</span>
-                </div>
-              </div>
-              <input type="range" id="beef-marucha-range" class="custom-range" min="0" max="100" value="0" step="5">
-            </div>
+          <div class="beef-section-header">
+            <div class="group-title" style="margin-bottom: 0;"><span>🐂</span> Cortes Vacunos</div>
+            <span class="beef-budget-badge" id="beef-budget-badge">Total vacuno: 0.0 kg</span>
+          </div>
+          <p class="slider-desc" style="margin-bottom: 0.75rem;">
+            Elige los cortes que vas a llevar y ajusta los kilos de cada uno; el resto se reacomoda automáticamente.
+          </p>
+          <div class="toggles-list beef-selector-list" id="beef-cuts-selector">
+            <!-- Populated dynamically via app.js -->
+          </div>
+          <div class="beef-cuts-grid" id="beef-cuts-sliders" style="margin-top: 0.85rem;">
+            <!-- Populated dynamically via app.js -->
           </div>
         </div>
 
@@ -408,7 +309,7 @@
       Calculadora de Asado &bull; Inspirada en la estética limpia de DoughGuy y las reglas de brasas de Clarín Gourmet.
     </p>
     <p style="margin-top: 0.5rem; font-size: 0.78rem;">
-      Creado con pasión por el buen asado. ¡A disfrutar del fuego! 🥩🔥
+      Creado con pasión por el buen asado. ¡A disfrutar del fuego! 🥩🔥 &bull; <span class="mono">v1.1.0</span>
     </p>
   </footer>
 
