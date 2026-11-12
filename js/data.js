@@ -3,7 +3,7 @@
 export const CUTS_ENCYCLOPEDIA = [
   {
     id: "asado-de-tira",
-    name: "Asado de Tira / Costillar",
+    name: "Costilla Cargada / Asado de Tira",
     englishName: "Short Ribs / Flanken Cut",
     category: "vacuno",
     anatomy: "Zona costillar (caja torácica del novillo). Se corta de forma transversal a los huesos de las costillas.",
@@ -17,7 +17,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "vacio",
-    name: "Vacío",
+    name: "Vacío / Falda",
     englishName: "Flank Steak / Bavette",
     category: "vacuno",
     anatomy: "Región lateral de los cuartos traseros, entre las costillas falsas y las caderas (zona abdominal).",
@@ -31,7 +31,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "entrana",
-    name: "Entraña",
+    name: "Arrachera / Entraña",
     englishName: "Skirt Steak",
     category: "vacuno",
     anatomy: "Es la parte carnosa del diafragma, adherida a las costillas del animal.",
@@ -45,7 +45,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "matambre",
-    name: "Matambre Vacuno",
+    name: "Matambre / Suadero",
     englishName: "Flank / Rose Meat",
     category: "vacuno",
     anatomy: "Músculo plano y delgado situado entre el cuero y el costillar del animal.",
@@ -59,7 +59,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "ojo-de-bife",
-    name: "Ojo de Bife / Bife Ancho",
+    name: "Rib Eye (Ojo de Bife)",
     englishName: "Ribeye",
     category: "vacuno",
     anatomy: "Sector dorsal delantero, deshuesado del lomo alto (vértebras dorsales 5 a 10).",
@@ -73,7 +73,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "bife-de-chorizo",
-    name: "Bife de Chorizo / Bife Angosto",
+    name: "New York (Bife de Chorizo)",
     englishName: "Striploin / New York Strip",
     category: "vacuno",
     anatomy: "Parte externa del lomo bajo (a lo largo de las vértebras lumbares).",
@@ -87,7 +87,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "colita-de-cuadril",
-    name: "Colita de Cuadril",
+    name: "Tri-Tip / Colita de Cuadril",
     englishName: "Tri-Tip",
     category: "vacuno",
     anatomy: "Músculo de forma triangular situado en la parte baja del cuarto trasero (anca del animal).",
@@ -129,7 +129,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "lomo",
-    name: "Lomo",
+    name: "Filete de Res (Lomo)",
     englishName: "Tenderloin / Filet Mignon",
     category: "vacuno",
     anatomy: "Músculo alargado y cilíndrico ubicado bajo las vértebras lumbares, zona no trabajada por el animal.",
@@ -185,7 +185,7 @@ export const CUTS_ENCYCLOPEDIA = [
   },
   {
     id: "marucha",
-    name: "Marucha / Bife de Paleta",
+    name: "Diezmillo / Flat Iron",
     englishName: "Flat Iron Steak / Top Blade",
     category: "vacuno",
     anatomy: "Tapa superior de la paleta (hombro delantero), apoyada sobre el omóplato del animal.",
@@ -469,10 +469,10 @@ export const FUEL_TYPES = {
   carbon: {
     id: "carbon",
     name: "Carbón Vegetal",
-    description: "Regla clásica: 1 kg de carbón por cada 1 kg de carne (+ margen de seguridad del 25%).",
-    ratio: 1.25,
+    description: "Asador con tapa / Weber: ~0.65 kg de carbón por cada 1 kg de carne (mín. 2 kg).",
+    ratio: 0.65,
     unit: "kg",
-    bagSize: 4, // bolsas estándar de 4 kg o 5 kg
+    bagSize: 4, // bolsas estándar de 4 kg
     bagLabel: "bolsas de carbón (4 kg)",
     icon: "🔥"
   },
@@ -528,14 +528,14 @@ export const APPETITE_LEVELS = {
 };
 
 export const BEEF_CUTS = [
-  { key: "tira", label: "Asado de Tira", defaultSelected: true, defaultShare: 40 },
-  { key: "vacio", label: "Vacío", defaultSelected: true, defaultShare: 40 },
-  { key: "entrana", label: "Entraña", defaultSelected: true, defaultShare: 20 },
-  { key: "bifeChorizo", label: "Bife de Chorizo", defaultSelected: false, defaultShare: 0 },
-  { key: "ojoBife", label: "Ojo de Bife", defaultSelected: false, defaultShare: 0 },
+  { key: "tira", label: "Costilla Cargada / Short Rib", defaultSelected: true, defaultShare: 40 },
+  { key: "vacio", label: "Vacío / Falda", defaultSelected: true, defaultShare: 40 },
+  { key: "entrana", label: "Arrachera (Entraña)", defaultSelected: true, defaultShare: 20 },
+  { key: "bifeChorizo", label: "New York", defaultSelected: false, defaultShare: 0 },
+  { key: "ojoBife", label: "Rib Eye", defaultSelected: false, defaultShare: 0 },
   { key: "picana", label: "Picaña", defaultSelected: false, defaultShare: 0 },
-  { key: "colita", label: "Colita de Cuadril", defaultSelected: false, defaultShare: 0 },
-  { key: "matambre", label: "Matambre", defaultSelected: false, defaultShare: 0 },
-  { key: "lomo", label: "Lomo", defaultSelected: false, defaultShare: 0 },
-  { key: "marucha", label: "Marucha / Arañita", defaultSelected: false, defaultShare: 0 }
+  { key: "colita", label: "Tri-Tip (Colita de Cuadril)", defaultSelected: false, defaultShare: 0 },
+  { key: "matambre", label: "Matambre / Suadero", defaultSelected: false, defaultShare: 0 },
+  { key: "lomo", label: "Filete de Res (Lomo)", defaultSelected: false, defaultShare: 0 },
+  { key: "marucha", label: "Diezmillo / Flat Iron", defaultSelected: false, defaultShare: 0 }
 ];

@@ -156,7 +156,7 @@ export function calculateAsado(state) {
     achurasGrams
   ) / 1000;
 
-  // Fuel Calculation (Based on Clarín formula: 1kg coal per 1kg meat + buffer, or 2.2kg wood, or 0 for Gas)
+  // Fuel Calculation (Conservative Weber / closed-lid kettle: ~0.65 kg coal per 1 kg meat, min 2 kg)
   let fuelResult = {
     type: fuelType,
     isGas: fuelType === 'gas',
@@ -170,12 +170,12 @@ export function calculateAsado(state) {
   if (fuelType === 'gas') {
     fuelResult.notes = "Parrilla a gas seleccionada. No requiere carbón ni leña. Asegúrate de tener el tanque lleno o conexión de red.";
   } else if (fuelType === 'carbon') {
-    // 1 kg per kg meat + 25% safety margin, minimum 3.5 kg
-    const estimatedKg = Math.max(3.5, Math.ceil(totalProteinsKg * 1.25));
-    const bags = Math.ceil(estimatedKg / 4); // bolsas de 4kg estándar
-    fuelResult.coalKg = bags * 4;
+    // 0.65 kg per kg meat (Weber / closed-lid grill), rounded up to nearest 0.5 kg, minimum 2 kg
+    const estimatedKg = Math.max(2, Math.ceil(totalProteinsKg * 0.65 * 2) / 2);
+    const bags = Math.ceil(estimatedKg / 4); // bolsas estándar de 4kg
+    fuelResult.coalKg = estimatedKg;
     fuelResult.coalBags = bags;
-    fuelResult.notes = `Regla de 1 kg/kg carne + margen. Te conviene comprar ${bags} bolsa${bags > 1 ? 's' : ''} de 4 kg (${bags * 4} kg total).`;
+    fuelResult.notes = `Asador con tapa / Weber (~0.65 kg/kg carne). Necesitas ~${estimatedKg} kg de carbón (${bags} bolsa${bags > 1 ? 's' : ''} de 4 kg).`;
   } else if (fuelType === 'lena') {
     // 2.2 kg wood per kg meat, min 8 kg
     const estimatedKg = Math.max(8, Math.ceil(totalProteinsKg * 2.2));
@@ -184,15 +184,15 @@ export function calculateAsado(state) {
     fuelResult.woodBags = bags;
     fuelResult.notes = `La leña rinde menos en brasa que el carbón. Te conviene comprar ${bags} bolsa${bags > 1 ? 's' : ''} de leña de 10 kg (${bags * 10} kg total).`;
   } else if (fuelType === 'mix') {
-    const coalKg = Math.max(2.5, Math.ceil(totalProteinsKg * 0.6));
+    const coalKg = Math.max(1.5, Math.ceil(totalProteinsKg * 0.4 * 2) / 2);
     const woodKg = Math.max(5, Math.ceil(totalProteinsKg * 1.2));
     const coalBags = Math.ceil(coalKg / 4);
     const woodBags = Math.ceil(woodKg / 10);
-    fuelResult.coalKg = coalBags * 4;
+    fuelResult.coalKg = coalKg;
     fuelResult.coalBags = coalBags;
     fuelResult.woodKg = woodBags * 10;
     fuelResult.woodBags = woodBags;
-    fuelResult.notes = `Mix tradicional: ${coalBags} bolsa(s) de carbón para la base rápida + ${woodBags} bolsa(s) de leña para aroma y brasa sostenida.`;
+    fuelResult.notes = `Mix tradicional: ~${coalKg} kg de carbón (${coalBags} bolsa(s) de 4 kg) para la base + ${woodBags} bolsa(s) de leña para aroma.`;
   }
 
   // Sides & Bread
@@ -267,26 +267,20 @@ export function formatWhatsAppShoppingList(calc, state) {
   if (calc.fuel.isGas) {
     lines.push(`• Parrilla a gas (verificar tanque/conexión)`);
   } else if (calc.fuel.type === 'carbon') {
-    lines.push(`• Carbón: ${calc.fuel.coalBags} bolsa(s) de 4kg (~${calc.fuel.coalKg} kg)`);
+    lines.push(`• Carbón: ~${calc.fuel.coalKg} kg (${calc.fuel.coalBags} bolsa(s) de 4kg)`);
   } else if (calc.fuel.type === 'lena') {
     lines.push(`• Leña: ${calc.fuel.woodBags} bolsa(s) de 10kg (~${calc.fuel.woodKg} kg)`);
   } else {
-    lines.push(`• Carbón: ${calc.fuel.coalBags} bolsa(s) de 4kg`);
+    lines.push(`• Carbón: ~${calc.fuel.coalKg} kg (${calc.fuel.coalBags} bolsa(s) de 4kg)`);
     lines.push(`• Leña: ${calc.fuel.woodBags} bolsa(s) de 10kg`);
   }
   lines.push(``);
 
   lines.push(`🥩 *CARNICERÍA:*`);
-  if (calc.meats.tiraKg > 0) lines.push(`• Asado de tira: ${calc.meats.tiraKg} kg`);
-  if (calc.meats.vacioKg > 0) lines.push(`• Vacío: ${calc.meats.vacioKg} kg`);
-  if (calc.meats.entranaKg > 0) lines.push(`• Entraña: ${calc.meats.entranaKg} kg`);
-  if (calc.meats.bifeChorizoKg > 0) lines.push(`• Bife de Chorizo: ${calc.meats.bifeChorizoKg} kg`);
-  if (calc.meats.ojoBifeKg > 0) lines.push(`• Ojo de Bife: ${calc.meats.ojoBifeKg} kg`);
-  if (calc.meats.picanaKg > 0) lines.push(`• Picaña: ${calc.meats.picanaKg} kg`);
-  if (calc.meats.colitaKg > 0) lines.push(`• Colita de Cuadril: ${calc.meats.colitaKg} kg`);
-  if (calc.meats.matambreKg > 0) lines.push(`• Matambre: ${calc.meats.matambreKg} kg`);
-  if (calc.meats.lomoKg > 0) lines.push(`• Lomo: ${calc.meats.lomoKg} kg`);
-  if (calc.meats.maruchaKg > 0) lines.push(`• Marucha / Arañita: ${calc.meats.maruchaKg} kg`);
+  BEEF_CUTS.forEach((cut) => {
+    const kg = calc.meats[`${cut.key}Kg`];
+    if (kg > 0) lines.push(`• ${cut.label}: ${kg} kg`);
+  });
   if (calc.meats.porkKg > 0) lines.push(`• Pechito / Bondiola de cerdo: ${calc.meats.porkKg} kg`);
   if (calc.meats.chickenKg > 0) lines.push(`• Pollo (pata-muslo): ${calc.meats.chickenKg} kg`);
   if (calc.meats.chorizos > 0) lines.push(`• Chorizos: ${calc.meats.chorizos} unidades`);

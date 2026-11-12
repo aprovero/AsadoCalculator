@@ -515,7 +515,7 @@ function recalculate(skipNumberKey = null) {
     
     if (calc.fuel.type === 'carbon') {
       fuelName.textContent = '🔥 Carbón Recomendado';
-      fuelBadge.textContent = `${calc.fuel.coalBags} bolsa${calc.fuel.coalBags > 1 ? 's' : ''} (4kg)`;
+      fuelBadge.textContent = `~${calc.fuel.coalKg} kg (${calc.fuel.coalBags} bolsa${calc.fuel.coalBags > 1 ? 's' : ''} 4kg)`;
     } else if (calc.fuel.type === 'lena') {
       fuelName.textContent = '🪵 Leña Recomendada';
       fuelBadge.textContent = `${calc.fuel.woodBags} bolsa${calc.fuel.woodBags > 1 ? 's' : ''} (10kg)`;
@@ -542,11 +542,11 @@ function renderShoppingList(calc) {
   // Fuel item
   if (!calc.fuel.isGas) {
     if (calc.fuel.type === 'carbon') {
-      items.push({ icon: '🔥', name: 'Carbón vegetal', qty: `${calc.fuel.coalBags} bolsa(s) de 4kg (~${calc.fuel.coalKg} kg)` });
+      items.push({ icon: '🔥', name: 'Carbón vegetal', qty: `~${calc.fuel.coalKg} kg (${calc.fuel.coalBags} bolsa(s) de 4kg)` });
     } else if (calc.fuel.type === 'lena') {
       items.push({ icon: '🪵', name: 'Leña dura (quebracho/espinillo)', qty: `${calc.fuel.woodBags} bolsa(s) de 10kg (~${calc.fuel.woodKg} kg)` });
     } else {
-      items.push({ icon: '🔥', name: 'Carbón vegetal', qty: `${calc.fuel.coalBags} bolsa(s)` });
+      items.push({ icon: '🔥', name: 'Carbón vegetal', qty: `~${calc.fuel.coalKg} kg (${calc.fuel.coalBags} bolsa(s))` });
       items.push({ icon: '🪵', name: 'Leña dura', qty: `${calc.fuel.woodBags} bolsa(s)` });
     }
   } else {
@@ -554,16 +554,10 @@ function renderShoppingList(calc) {
   }
 
   // Meats
-  if (calc.meats.tiraKg > 0) items.push({ icon: '🥩', name: 'Asado de Tira', qty: `${calc.meats.tiraKg} kg` });
-  if (calc.meats.vacioKg > 0) items.push({ icon: '🥩', name: 'Vacío', qty: `${calc.meats.vacioKg} kg` });
-  if (calc.meats.entranaKg > 0) items.push({ icon: '🥩', name: 'Entraña', qty: `${calc.meats.entranaKg} kg` });
-  if (calc.meats.bifeChorizoKg > 0) items.push({ icon: '🥩', name: 'Bife de Chorizo', qty: `${calc.meats.bifeChorizoKg} kg` });
-  if (calc.meats.ojoBifeKg > 0) items.push({ icon: '🥩', name: 'Ojo de Bife', qty: `${calc.meats.ojoBifeKg} kg` });
-  if (calc.meats.picanaKg > 0) items.push({ icon: '🥩', name: 'Picaña', qty: `${calc.meats.picanaKg} kg` });
-  if (calc.meats.colitaKg > 0) items.push({ icon: '🥩', name: 'Colita de Cuadril', qty: `${calc.meats.colitaKg} kg` });
-  if (calc.meats.matambreKg > 0) items.push({ icon: '🥩', name: 'Matambre', qty: `${calc.meats.matambreKg} kg` });
-  if (calc.meats.lomoKg > 0) items.push({ icon: '🥩', name: 'Lomo', qty: `${calc.meats.lomoKg} kg` });
-  if (calc.meats.maruchaKg > 0) items.push({ icon: '🥩', name: 'Marucha / Arañita', qty: `${calc.meats.maruchaKg} kg` });
+  BEEF_CUTS.forEach((cut) => {
+    const kg = calc.meats[`${cut.key}Kg`];
+    if (kg > 0) items.push({ icon: '🥩', name: cut.label, qty: `${kg} kg` });
+  });
   if (calc.meats.porkKg > 0) items.push({ icon: '🥓', name: 'Pechito / Bondiola de Cerdo', qty: `${calc.meats.porkKg} kg` });
   if (calc.meats.chickenKg > 0) items.push({ icon: '🍗', name: 'Pollo (pata-muslo)', qty: `${calc.meats.chickenKg} kg` });
   if (calc.meats.chorizos > 0) items.push({ icon: '🌭', name: 'Chorizos', qty: `${calc.meats.chorizos} u.` });
