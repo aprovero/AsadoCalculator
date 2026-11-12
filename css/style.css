@@ -842,16 +842,12 @@ h1, h2, h3, h4 {
   width: 100%;
   max-width: 580px;
   margin: 0 auto;
-  height: 650px;
   overflow: hidden;
   border-radius: var(--radius-sm);
   background-color: #0c0a09;
 }
 
 .poster-cropped-img {
-  position: absolute;
-  top: -65px; /* Crops the Facebook app header */
-  left: 0;
   width: 100%;
   height: auto;
   display: block;
