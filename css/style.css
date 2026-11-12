@@ -945,6 +945,24 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
 }
 
+.cut-category-badge.cat-vacuno {
+  background: rgba(224, 58, 47, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(224, 58, 47, 0.3);
+}
+
+.cut-category-badge.cat-cerdo {
+  background: rgba(249, 115, 22, 0.15);
+  color: #fdba74;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+.cut-category-badge.cat-achuras {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fde047;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
 .cut-detail-section {
   margin-bottom: 0.85rem;
 }

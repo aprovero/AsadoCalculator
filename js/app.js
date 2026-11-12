@@ -399,7 +399,8 @@ function renderCutsGrid() {
       const matchEnglish = cut.englishName.toLowerCase().includes(state.searchQuery);
       const matchAnatomy = cut.anatomy.toLowerCase().includes(state.searchQuery);
       const matchBest = cut.bestFor.toLowerCase().includes(state.searchQuery);
-      if (!matchName && !matchEnglish && !matchAnatomy && !matchBest) {
+      const matchTips = cut.tips && cut.tips.toLowerCase().includes(state.searchQuery);
+      if (!matchName && !matchEnglish && !matchAnatomy && !matchBest && !matchTips) {
         return false;
       }
     }
@@ -427,7 +428,7 @@ function renderCutsGrid() {
           <h3 class="cut-card-title">${cut.name}</h3>
           <div class="cut-card-english">${cut.englishName}</div>
         </div>
-        <span class="cut-category-badge">${cut.category}</span>
+        <span class="cut-category-badge cat-${cut.category}">${cut.category}</span>
       </div>
 
       <div class="cut-detail-section">
